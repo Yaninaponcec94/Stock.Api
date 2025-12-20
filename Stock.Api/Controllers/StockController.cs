@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Stock.Api.DTOs;
+using Stock.Application.Exceptions;
 using Stock.Application.Interfaces;
+
 
 namespace Stock.Api.Controllers
 {
@@ -23,10 +25,22 @@ namespace Stock.Api.Controllers
 				var result = await _service.CreateMovementAsync(dto.ProductId, dto.Type, dto.Quantity, dto.Reason);
 				return Ok(result);
 			}
+			catch (ConcurrencyException ex)
+			{
+				return Conflict(new { message = ex.Message });
+			}
 			catch (InvalidOperationException ex)
 			{
 				return BadRequest(new { message = ex.Message });
 			}
 		}
+
+		[HttpGet("alerts")]
+		public async Task<IActionResult> GetAlerts()
+		{
+			var alerts = await _service.GetStockAlertsAsync();
+			return Ok(alerts);
+		}
+
 	}
 }

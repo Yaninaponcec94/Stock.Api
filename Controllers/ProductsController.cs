@@ -17,8 +17,18 @@ namespace Stock.Api.Controllers
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<List<Product>>> GetAll()
-			=> Ok(await _service.GetAllAsync());
+		public async Task<ActionResult<PagedResult<Product>>> GetAll([FromQuery] string? name, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+		{
+			var result = await _service.GetAllAsync(new ProductFilter
+			{
+				Name = name,
+				Page = page,
+				PageSize = pageSize
+			});
+
+			return Ok(result);
+		}
+
 
 		[HttpGet("{id:int}")]
 		public async Task<ActionResult<Product>> GetById(int id)

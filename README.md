@@ -98,3 +98,7 @@ nuevas entidades relacionadas a stock
 
 Este repositorio refleja el progreso real del challenge, priorizando claridad, buenas prácticas y 
 decisiones justificadas por sobre soluciones rápidas o acopladas.
+
+19/12
+La búsqueda se centralizó en un único endpoint utilizando query parameters, evitando duplicación de 
+endpoints y retornando siempre estructuras válidas con 200 OK, incluso cuando no hay resultados.

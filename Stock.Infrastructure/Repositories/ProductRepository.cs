@@ -62,7 +62,7 @@ namespace Stock.Infrastructure.Repositories
 		public async Task<Product?> GetActiveByIdAsync(int id)
 		{
 			return await _context.Products
-				.Where(p => p.Id == id)
+				.Where(p => p.Id == id && p.IsActive)
 				.Select(p => new Product
 				{
 					Id = p.Id,

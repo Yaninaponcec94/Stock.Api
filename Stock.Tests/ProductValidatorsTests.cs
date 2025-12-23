@@ -1,4 +1,4 @@
-﻿using Stock.Api.DTOs;
+﻿using Stock.Application.DTOs;
 using Stock.Api.Validators;
 using Xunit;
 

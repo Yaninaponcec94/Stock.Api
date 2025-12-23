@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Stock.Api.DTOs;
+using Stock.Application.DTOs;
 using Stock.Application.Interfaces;
+using Stock.Application.Models;
 
 namespace Stock.Api.Controllers
 {
@@ -27,8 +28,7 @@ namespace Stock.Api.Controllers
 		[HttpPost("entry")]
 		public async Task<IActionResult> Entry([FromBody] CreateStockMovementDto dto)
 		{
-			dto.Type = "Entry";
-			var result = await _service.CreateMovementAsync(dto.ProductId, dto.Type, dto.Quantity, dto.Reason);
+			var result = await _service.CreateMovementAsync(dto.ProductId, StockMovementType.Entry, dto.Quantity, dto.Reason);
 			return Ok(result);
 		}
 
@@ -36,8 +36,7 @@ namespace Stock.Api.Controllers
 		[HttpPost("exit")]
 		public async Task<IActionResult> Exit([FromBody] CreateStockMovementDto dto)
 		{
-			dto.Type = "Exit";
-			var result = await _service.CreateMovementAsync(dto.ProductId, dto.Type, dto.Quantity, dto.Reason);
+			var result = await _service.CreateMovementAsync(dto.ProductId, StockMovementType.Exit, dto.Quantity, dto.Reason);
 			return Ok(result);
 		}
 
@@ -45,10 +44,8 @@ namespace Stock.Api.Controllers
 		[HttpPost("adjustment")]
 		public async Task<IActionResult> Adjustment([FromBody] CreateStockMovementDto dto)
 		{
-			dto.Type = "Adjustment";
-			var result = await _service.CreateMovementAsync(dto.ProductId, dto.Type, dto.Quantity, dto.Reason);
+			var result = await _service.CreateMovementAsync(dto.ProductId, StockMovementType.Adjustment, dto.Quantity, dto.Reason);
 			return Ok(result);
 		}
 	}
 }
-

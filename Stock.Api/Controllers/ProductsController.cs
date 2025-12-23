@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Stock.Api.DTOs;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Stock.Application.DTOs;
 using Stock.Application.Interfaces;
 using Stock.Application.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Stock.Api.Controllers
 {
-	
 	[ApiController]
 	[Route("api/[controller]")]
 	public class ProductsController : ControllerBase
@@ -19,7 +18,10 @@ namespace Stock.Api.Controllers
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<PagedResult<Product>>> GetAll([FromQuery] string? name, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+		public async Task<ActionResult<PagedResult<ProductResponseDto>>> GetAll(
+			[FromQuery] string? name,
+			[FromQuery] int page = 1,
+			[FromQuery] int pageSize = 10)
 		{
 			var result = await _service.GetAllAsync(new ProductFilter
 			{
@@ -31,39 +33,27 @@ namespace Stock.Api.Controllers
 			return Ok(result);
 		}
 
-
 		[HttpGet("{id:int}")]
-		public async Task<ActionResult<Product>> GetById(int id)
+		public async Task<ActionResult<ProductResponseDto>> GetById(int id)
 		{
 			var product = await _service.GetByIdAsync(id);
 			if (product is null) return NotFound();
 			return Ok(product);
 		}
-		[Authorize(Roles = "Admin")] //protejo para q admin solo pueda crear productos
-		[HttpPost]
-		public async Task<ActionResult<Product>> Create(CreateProductDto dto)
-		{
-			var created = await _service.CreateAsync(new Product
-			{
-				Name = dto.Name,
-				IsActive = true,
-				MinStock = dto.MinStock
-			});
 
+		[Authorize(Roles = "Admin")]
+		[HttpPost]
+		public async Task<ActionResult<ProductResponseDto>> Create([FromBody] CreateProductDto dto)
+		{
+			var created = await _service.CreateAsync(dto);
 			return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
 		}
 
 		[Authorize(Roles = "Admin")]
 		[HttpPut("{id:int}")]
-		public async Task<IActionResult> Update(int id, UpdateProductDto dto)
+		public async Task<IActionResult> Update(int id, [FromBody] UpdateProductDto dto)
 		{
-			var ok = await _service.UpdateAsync(id, new Product
-			{
-				Name = dto.Name,
-				IsActive = dto.IsActive,
-				MinStock = dto.MinStock
-			});
-
+			var ok = await _service.UpdateAsync(id, dto);
 			if (!ok) return NotFound();
 			return NoContent();
 		}

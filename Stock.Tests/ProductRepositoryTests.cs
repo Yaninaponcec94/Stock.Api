@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Stock.Application.Models; // ✅ para ProductFilter y PagedResult
+using Stock.Application.Models; 
 using Stock.Infrastructure.Data;
 using Stock.Infrastructure.Repositories;
 using Xunit;
-using EntityProduct = Stock.Infrastructure.Entities.Product; // ✅ alias para evitar ambigüedad
+using EntityProduct = Stock.Infrastructure.Entities.Product; 
 
 namespace Stock.Tests
 {

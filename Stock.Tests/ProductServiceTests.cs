@@ -8,6 +8,7 @@ using Stock.Application.Interfaces;
 using Stock.Application.Models;
 using Stock.Application.Services;
 using Xunit;
+using Stock.Application.DTOs;
 
 namespace Stock.Tests
 {
@@ -58,17 +59,19 @@ namespace Stock.Tests
 			var repo = new Mock<IProductRepository>();
 			var service = new ProductService(repo.Object);
 
-			var p = new Product
+			var dto = new CreateProductDto
 			{
 				Name = "  Teclado   ",
-				IsActive = true,
 				MinStock = 2
 			};
 
-			await service.CreateAsync(p);
+			var created = await service.CreateAsync(dto);
 
-			Assert.Equal("Teclado", p.Name);
-			repo.Verify(r => r.AddAsync(It.Is<Product>(x => x.Name == "Teclado")), Times.Once);
+			Assert.NotNull(created);
+			Assert.Equal("Teclado", created.Name);
+
+			repo.Verify(r => r.AddAsync(It.Is<Product>(x => x.Name == "Teclado" && x.MinStock == 2)), Times.Once);
+
 
 		}
 
@@ -80,7 +83,13 @@ namespace Stock.Tests
 
 			repo.Setup(r => r.GetActiveByIdAsync(10)).ReturnsAsync((Product?)null);
 
-			var ok = await service.UpdateAsync(10, new Product { Name = "X", IsActive = true, MinStock = 0 });
+			var ok = await service.UpdateAsync(10, new UpdateProductDto
+			{
+				Name = "X",
+				IsActive = true,
+				MinStock = 0
+			});
+
 
 			Assert.False(ok);
 			repo.Verify(r => r.UpdateAsync(It.IsAny<Product>()), Times.Never);
@@ -95,7 +104,13 @@ namespace Stock.Tests
 
 			repo.Setup(r => r.GetActiveByIdAsync(3)).ReturnsAsync(existing);
 
-			var ok = await service.UpdateAsync(3, new Product { Name = "  Nuevo  ", IsActive = false, MinStock = 9 });
+			var ok = await service.UpdateAsync(3, new UpdateProductDto
+			{
+				Name = "  Nuevo  ",
+				IsActive = false,
+				MinStock = 9
+			});
+
 
 			Assert.True(ok);
 			Assert.Equal("Nuevo", existing.Name);

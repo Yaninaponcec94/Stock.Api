@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Stock.Api.DTOs;
+using Stock.Application.DTOs;
 
 namespace Stock.Api.Validators
 {

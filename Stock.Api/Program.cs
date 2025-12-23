@@ -1,17 +1,19 @@
+using System.Text;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Stock.Api.Exceptions;
+using Stock.Api.Middleware;
+using Stock.Api.Seed;
+using Stock.Api.Validators;
 using Stock.Application.Interfaces;
 using Stock.Application.Services;
 using Stock.Infrastructure.Data;
 using Stock.Infrastructure.Repositories;
-using Stock.Api.Validators;
-using Stock.Api.Seed;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.OpenApi.Models;
-using Stock.Api.Exceptions;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -52,7 +54,8 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddScoped<IStockService, StockService>();
 builder.Services.AddScoped<IStockRepository, StockRepository>();
 
-
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -102,6 +105,8 @@ using (var scope = app.Services.CreateScope())
 
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -1,9 +1,9 @@
-﻿namespace Stock.Api.DTOs
+﻿namespace Stock.Application.DTOs
+
 {
-    public class UpdateProductDto
+	public class CreateProductDto
     {
         public string Name { get; set; } = string.Empty;
-        public bool IsActive { get; set; }
         public int MinStock { get; set; }
 	}
 }

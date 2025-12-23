@@ -9,9 +9,10 @@ namespace Stock.Application.Interfaces
 {
 	public interface IStockService
 	{
-		Task<ProductStockResult> CreateMovementAsync(int productId, string type, int quantity, string? reason);
+		Task<ProductStockResult> CreateMovementAsync(int productId, StockMovementType type, int quantity, string? reason);
 		Task<List<StockItemResult>> GetStockAsync();
 
+		
 
 
 	}

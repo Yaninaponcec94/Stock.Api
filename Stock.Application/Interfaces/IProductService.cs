@@ -1,15 +1,15 @@
-﻿using Stock.Application.Models;
+﻿using Stock.Application.DTOs;
+using Stock.Application.Models;
 
 namespace Stock.Application.Interfaces
 {
 	public interface IProductService
 	{
-		Task<PagedResult<Product>> GetAllAsync(ProductFilter filter);
+		Task<PagedResult<ProductResponseDto>> GetAllAsync(ProductFilter filter);
+		Task<ProductResponseDto?> GetByIdAsync(int id);
 
-		Task<Product?> GetByIdAsync(int id);
-		Task<Product> CreateAsync(Product product);
-		Task<bool> UpdateAsync(int id, Product product);
+		Task<ProductResponseDto> CreateAsync(CreateProductDto dto);
+		Task<bool> UpdateAsync(int id, UpdateProductDto dto);
 		Task<bool> DeleteAsync(int id);
 	}
 }
-

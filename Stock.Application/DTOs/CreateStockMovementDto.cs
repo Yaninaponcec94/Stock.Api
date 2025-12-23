@@ -1,6 +1,7 @@
-﻿namespace Stock.Api.DTOs
+﻿namespace Stock.Application.DTOs
+
 {
-    public class CreateStockMovementDto
+	public class CreateStockMovementDto
     {
 		public int ProductId { get; set; }
 		public string Type { get; set; } = string.Empty; 

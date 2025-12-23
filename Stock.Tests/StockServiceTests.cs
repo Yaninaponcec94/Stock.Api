@@ -8,6 +8,8 @@ using Stock.Application.Interfaces;
 using Stock.Application.Models;
 using Stock.Application.Services;
 using Xunit;
+
+
 namespace Stock.Tests
 {
     public class StockServiceTests
@@ -19,9 +21,9 @@ namespace Stock.Tests
             var service = new StockService(repo.Object);
 
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(() =>
-                service.CreateMovementAsync(productId: 1, type: "Entry", quantity: 0, reason: "test"));
+                service.CreateMovementAsync(productId: 1, type: StockMovementType.Entry, quantity: 0, reason: "test"));
 
-            Assert.Equal("La cantidad debe ser mayor a 0", ex.Message);
+			Assert.Equal("La cantidad debe ser mayor a 0", ex.Message);
         }
 
         [Fact]
@@ -32,8 +34,8 @@ namespace Stock.Tests
 
             var service = new StockService(repo.Object);
 
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() =>
-                service.CreateMovementAsync(3, "Entry", 5, "test"));
+			var ex = await Assert.ThrowsAsync<InvalidOperationException>(() =>
+				service.CreateMovementAsync(3, StockMovementType.Entry, 5, "test"));
 
 			Assert.Equal("Producto no existe o está inactivo", ex.Message);
 
@@ -48,8 +50,8 @@ namespace Stock.Tests
 
             var service = new StockService(repo.Object);
 
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() =>
-                service.CreateMovementAsync(3, "Exit", 10, "test"));
+			var ex = await Assert.ThrowsAsync<InvalidOperationException>(() =>
+				service.CreateMovementAsync(3, StockMovementType.Exit, 10, "test"));
 
 			Assert.Equal("Stock insuficiente para realizar la salida", ex.Message);
 
@@ -67,9 +69,9 @@ namespace Stock.Tests
 
             var service = new StockService(repo.Object);
 
-            var result = await service.CreateMovementAsync(1, "Entry", 5, "ok");
+			var result = await service.CreateMovementAsync(1, StockMovementType.Entry, 5, "ok");
 
-            Assert.Equal(1, result.ProductId);
+			Assert.Equal(1, result.ProductId);
             Assert.Equal(5, result.NewQuantity);
 
             repo.Verify(r => r.ApplyMovementAsync(1, "Entry", 5, "ok"), Times.Once);

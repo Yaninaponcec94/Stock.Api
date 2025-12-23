@@ -10,7 +10,6 @@ namespace Stock.Api.Seed
 		{
 			Console.WriteLine($"[SEED] DB: {db.Database.GetDbConnection().Database}");
 
-			// (opcional pero recomendado) asegura que la DB esté al día
 			await db.Database.MigrateAsync();
 
 			var adminExists = await db.Users.AnyAsync(u => u.Username == "admin");

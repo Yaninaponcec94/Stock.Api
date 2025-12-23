@@ -72,51 +72,95 @@ Este repositorio refleja el progreso real del challenge, priorizando claridad, b
 
 # Stock.Tests (xUnit)
 
-Este proyecto contiene **unit tests** del backend, enfocados en validar la **lógica de negocio** y el comportamiento de la capa de **Services**.
+Este proyecto contiene **unit tests** del backend. El foco está en validar:
+- reglas de negocio (Services)
+- validaciones de DTOs (FluentValidation)
+- comportamiento de Repositories usando **EF Core InMemory**
+
+La idea es cubrir lo más evaluable del challenge con pruebas rápidas, aisladas y fáciles de ejecutar.
+
+---
 
 ## ¿Por qué unit tests y por qué en Services?
-En esta solución, las reglas importantes viven en `Stock.Application.Services`:
-- validaciones de negocio (ej. no permitir cantidades inválidas)
-- decisiones según tipo de movimiento (Entry / Exit / Adjustment)
-- soft delete y actualización controlada de productos
-- delegación correcta hacia repositorios (contratos)
 
-Por eso se priorizaron **unit tests**: son rápidos, aislados y verifican lo más crítico del challenge.
+En esta solución, las reglas importantes viven en `Stock.Application.Services`:
+
+- Validaciones de negocio (ej. no permitir cantidades inválidas).
+- Decisiones según tipo de operación (Entry / Exit / Adjustment).
+- Soft delete y actualización controlada de productos.
+- Delegación correcta hacia repositorios (contratos).
+
+Por eso se priorizaron unit tests: son rápidos, aislados y verifican lo más crítico del sistema.
+
+---
 
 ## Qué cubren estos tests
 
-### StockService
-Se testean reglas centrales del sistema de stock:
-- **Cantidad inválida**: `quantity <= 0` debe fallar.
-- **Producto inexistente/inactivo**: no se permite operar si el producto no está activo.
-- **Salida con stock insuficiente**: en `Exit` debe rechazarse cuando no alcanza el stock.
-- **Flujo correcto**: en un caso válido, el service llama exactamente una vez al repositorio (`ApplyMovementAsync`).
+### ✅ StockServiceTests
+Reglas centrales del sistema de stock:
+- `quantity <= 0` debe fallar.
+- Producto inexistente/inactivo: no se permite operar.
+- `Exit` con stock insuficiente: se rechaza.
+- Caso válido: el service llama exactamente una vez a `ApplyMovementAsync`.
 
-### ProductService
-Se testea el comportamiento esperado para Products:
-- **Paginado y filtros**: el service delega el paginado al repositorio.
-- **GetById solo activos**: delega en `GetActiveByIdAsync`.
-- **Create**: se aplica `Trim()` al nombre antes de persistir.
-- **Update**:
+### ✅ ProductServiceTests
+Comportamiento esperado para Products:
+- Paginado y filtros: el service delega el paginado al repositorio.
+- `GetById`: delega en `GetActiveByIdAsync`.
+- `Create`: se aplica `Trim()` al nombre antes de persistir.
+- `Update`:
   - si no existe → retorna `false` y no actualiza
-  - si existe → actualiza campos y llama al repositorio
-- **Delete**: usa soft delete (`SoftDeleteAsync`).
+  - si existe → actualiza campos + trim y llama al repo
+- `Delete`: usa soft delete (`SoftDeleteAsync`).
+
+### ✅ ProductValidatorsTests (FluentValidation)
+Validación de DTOs:
+- `Name` obligatorio.
+- `MinStock >= 0`.
+- Casos válidos pasan correctamente.
+
+> Nota: se testean validators directamente con `validator.Validate(dto)` (sin TestHelper).
+
+### ✅ ProductRepositoryTests (EF Core InMemory)
+Pruebas de persistencia con DB en memoria:
+- `GetPagedActiveAsync` devuelve **solo activos**
+- Aplica filtro por nombre + paginado.
+
+> Nota: EF InMemory puede comportarse distinto a SQL Server en filtros por string (case-sensitive).  
+> Por eso los datos del test se preparan acorde para que el comportamiento sea estable.
+
+### ✅ StockAlertsFlagTests (EF Core InMemory)
+Valida la regla de **alerta de stock mínimo** como flag en `GET /api/stock`:
+- `IsBelowMinStock = true` cuando `Quantity <= MinStock`.
+- `false` cuando `Quantity > MinStock`.
+
+> Nota: `ProductStock.RowVersion` es obligatorio en tests con InMemory por la configuración de concurrency,
+> por eso se setea manualmente en los registros de prueba.
+
+---
 
 ## Qué no se testea (y por qué)
-- **Controllers**: se puede agregar con `WebApplicationFactory`/integration tests, pero no era prioritario para el challenge.
-- **Repositories / EF**: se puede cubrir con InMemory o DB real (integration tests), pero el objetivo fue validar primero la lógica y reglas de negocio.
-- **Autenticación JWT**: se validó funcionalmente con Swagger/Postman; tests automáticos serían un extra.
+
+- **Controllers**: se pueden cubrir con integration tests (WebApplicationFactory), pero no era prioritario.
+- **Auth JWT**: se validó funcionalmente en Swagger/Postman; automatizarlo sería un extra.
+- **SQL Server real**: las pruebas de repo se hicieron con InMemory para mantener los tests rápidos y ejecutables en cualquier entorno.
+
+---
 
 ## Herramientas
+
 - **xUnit**: framework de testing.
-- **Moq**: mocks para repositorios (aislar la lógica del service).
+- **Moq**: mocks para repositorios (aislar lógica del service).
+- **EF Core InMemory**: pruebas de repositorios sin DB real.
 - **Microsoft.NET.Test.Sdk + runner**: ejecución de tests en Visual Studio.
 
-## Cómo ejecutar
-Desde Visual Studio:
-- `Prueba` → `Explorador de pruebas` → `Ejecutar todo`
+---
 
-o desde CLI:
+## Cómo ejecutar
+
+### Desde Visual Studio
+`Prueba` → `Explorador de pruebas` → `Ejecutar todo`
+
+### Desde CLI
 ```bash
 dotnet test
-

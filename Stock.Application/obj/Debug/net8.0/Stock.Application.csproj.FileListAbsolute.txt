@@ -10,3 +10,4 @@ C:\Users\Yan\Desktop\desafio2\Stock.Application\obj\Debug\net8.0\refint\Stock.Ap
 C:\Users\Yan\Desktop\desafio2\Stock.Application\obj\Debug\net8.0\Stock.Application.pdb
 C:\Users\Yan\Desktop\desafio2\Stock.Application\obj\Debug\net8.0\ref\Stock.Application.dll
 C:\Users\Yan\Desktop\desafio2\Stock.Application\obj\Debug\net8.0\Stock.Application.csproj.AssemblyReference.cache
+C:\Users\Yan\Desktop\desafio2\Stock.Application\obj\Debug\net8.0\Stock.Application.sourcelink.json

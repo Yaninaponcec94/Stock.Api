@@ -2,9 +2,11 @@
 using Stock.Api.DTOs;
 using Stock.Application.Interfaces;
 using Stock.Application.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Stock.Api.Controllers
 {
+	
 	[ApiController]
 	[Route("api/[controller]")]
 	public class ProductsController : ControllerBase
@@ -37,7 +39,7 @@ namespace Stock.Api.Controllers
 			if (product is null) return NotFound();
 			return Ok(product);
 		}
-
+		[Authorize(Roles = "Admin")] //protejo para q admin solo pueda crear productos
 		[HttpPost]
 		public async Task<ActionResult<Product>> Create(CreateProductDto dto)
 		{
@@ -51,6 +53,7 @@ namespace Stock.Api.Controllers
 			return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
 		}
 
+		[Authorize(Roles = "Admin")]
 		[HttpPut("{id:int}")]
 		public async Task<IActionResult> Update(int id, UpdateProductDto dto)
 		{
@@ -65,6 +68,7 @@ namespace Stock.Api.Controllers
 			return NoContent();
 		}
 
+		[Authorize(Roles = "Admin")]
 		[HttpDelete("{id:int}")]
 		public async Task<IActionResult> Delete(int id)
 		{

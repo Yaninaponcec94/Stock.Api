@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Stock.Api.DTOs;
 using Stock.Application.Exceptions;
 using Stock.Application.Interfaces;
@@ -17,6 +18,7 @@ namespace Stock.Api.Controllers
 			_service = service;
 		}
 
+		[Authorize(Roles = "Admin")] //solo admin puede crear movimientos
 		[HttpPost("movements")]
 		public async Task<IActionResult> CreateMovement([FromBody] CreateStockMovementDto dto)
 		{

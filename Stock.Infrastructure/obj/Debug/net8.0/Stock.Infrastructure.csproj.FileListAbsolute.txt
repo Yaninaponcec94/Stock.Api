@@ -15,3 +15,4 @@ C:\Users\Yan\Desktop\desafio2\Stock.Infrastructure\obj\Debug\net8.0\ref\Stock.In
 C:\Users\Yan\Desktop\desafio2\Stock.Infrastructure\bin\Debug\net8.0\Stock.Application.dll
 C:\Users\Yan\Desktop\desafio2\Stock.Infrastructure\bin\Debug\net8.0\Stock.Application.pdb
 C:\Users\Yan\Desktop\desafio2\Stock.Infrastructure\obj\Debug\net8.0\Stock.In.20EDF14C.Up2Date
+C:\Users\Yan\Desktop\desafio2\Stock.Infrastructure\obj\Debug\net8.0\Stock.Infrastructure.sourcelink.json

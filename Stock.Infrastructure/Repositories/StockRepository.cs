@@ -93,28 +93,25 @@ namespace Stock.Infrastructure.Repositories
 				MovementId = movement.Id
 			};
 		}
-		public async Task<List<StockAlertResult>> GetStockAlertsAsync()
+		public async Task<List<StockItemResult>> GetStockAsync()
 		{
-			var query =
-				from p in _context.Products.AsNoTracking()
-				where p.IsActive
-				join s in _context.Stocks.AsNoTracking()
-					on p.Id equals s.ProductId into ps
-				from s in ps.DefaultIfEmpty()
-				let qty = (s == null ? 0 : s.Quantity)
-				where qty <= p.MinStock
-				select new StockAlertResult
-				{
-					ProductId = p.Id,
-					ProductName = p.Name,
-					Quantity = qty,
-					MinStock = p.MinStock,
-					UpdatedAt = s != null ? s.UpdatedAt : null
-				};
-
-			return await query.ToListAsync();
+			return await _context.Stocks
+				.Join(_context.Products,
+					s => s.ProductId,
+					p => p.Id,
+					(s, p) => new StockItemResult
+					{
+						ProductId = s.ProductId,
+						Quantity = s.Quantity,
+						UpdatedAt = s.UpdatedAt,
+						MinStock = p.MinStock,
+						IsBelowMinStock = s.Quantity <= p.MinStock
+					})
+				.ToListAsync();
 		}
+
+
 	}
-	
+
 }
 

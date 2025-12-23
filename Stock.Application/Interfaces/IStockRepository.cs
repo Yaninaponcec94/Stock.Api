@@ -15,7 +15,8 @@ namespace Stock.Application.Interfaces
 
 		Task<ProductStockResult> ApplyMovementAsync(int productId, string type, int quantity, string? reason);
 
-		Task<List<StockAlertResult>> GetStockAlertsAsync();
+		Task<List<StockItemResult>> GetStockAsync();
+
 
 
 

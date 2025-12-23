@@ -30,7 +30,7 @@ namespace Stock.Infrastructure.Configurations
 				   .HasMaxLength(250);
 
 			builder.HasOne(m => m.Product)
-				   .WithMany() // (si después querés Product.Movements, lo ajustamos)
+				   .WithMany()
 				   .HasForeignKey(m => m.ProductId)
 				   .OnDelete(DeleteBehavior.Restrict);
 

@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Stock.Api.DTOs;
-using Stock.Application.Exceptions;
 using Stock.Application.Interfaces;
-
 
 namespace Stock.Api.Controllers
 {
@@ -18,31 +16,39 @@ namespace Stock.Api.Controllers
 			_service = service;
 		}
 
-		[Authorize(Roles = "Admin")] //solo admin puede crear movimientos
-		[HttpPost("movements")]
-		public async Task<IActionResult> CreateMovement([FromBody] CreateStockMovementDto dto)
+		[HttpGet]
+		public async Task<IActionResult> GetStock()
 		{
-			try
-			{
-				var result = await _service.CreateMovementAsync(dto.ProductId, dto.Type, dto.Quantity, dto.Reason);
-				return Ok(result);
-			}
-			catch (ConcurrencyException ex)
-			{
-				return Conflict(new { message = ex.Message });
-			}
-			catch (InvalidOperationException ex)
-			{
-				return BadRequest(new { message = ex.Message });
-			}
+			var stock = await _service.GetStockAsync();
+			return Ok(stock);
 		}
 
-		[HttpGet("alerts")]
-		public async Task<IActionResult> GetAlerts()
+		[Authorize(Roles = "Admin")]
+		[HttpPost("entry")]
+		public async Task<IActionResult> Entry([FromBody] CreateStockMovementDto dto)
 		{
-			var alerts = await _service.GetStockAlertsAsync();
-			return Ok(alerts);
+			dto.Type = "Entry";
+			var result = await _service.CreateMovementAsync(dto.ProductId, dto.Type, dto.Quantity, dto.Reason);
+			return Ok(result);
 		}
 
+		[Authorize(Roles = "Admin")]
+		[HttpPost("exit")]
+		public async Task<IActionResult> Exit([FromBody] CreateStockMovementDto dto)
+		{
+			dto.Type = "Exit";
+			var result = await _service.CreateMovementAsync(dto.ProductId, dto.Type, dto.Quantity, dto.Reason);
+			return Ok(result);
+		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpPost("adjustment")]
+		public async Task<IActionResult> Adjustment([FromBody] CreateStockMovementDto dto)
+		{
+			dto.Type = "Adjustment";
+			var result = await _service.CreateMovementAsync(dto.ProductId, dto.Type, dto.Quantity, dto.Reason);
+			return Ok(result);
+		}
 	}
 }
+

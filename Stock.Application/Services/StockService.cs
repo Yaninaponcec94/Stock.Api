@@ -31,9 +31,10 @@ namespace Stock.Application.Services
 
 			return await _repo.ApplyMovementAsync(productId, type, quantity, reason);
 		}
+		public Task<List<StockItemResult>> GetStockAsync()
+    => _repo.GetStockAsync();
 
-		public Task<List<StockAlertResult>> GetStockAlertsAsync()
-				=> _repo.GetStockAlertsAsync();
+		
 
 
 

@@ -67,3 +67,56 @@ validaciones soft delete paginado y filtros nuevas entidades relacionadas a stoc
 Este repositorio refleja el progreso real del challenge, priorizando claridad, buenas prácticas y decisiones justificadas por sobre soluciones rápidas o acopladas.
 
 19/12 La búsqueda se centralizó en un único endpoint utilizando query parameters, evitando duplicación de endpoints y retornando siempre estructuras válidas con 200 OK, incluso cuando no hay resultados.
+
+---
+
+# Stock.Tests (xUnit)
+
+Este proyecto contiene **unit tests** del backend, enfocados en validar la **lógica de negocio** y el comportamiento de la capa de **Services**.
+
+## ¿Por qué unit tests y por qué en Services?
+En esta solución, las reglas importantes viven en `Stock.Application.Services`:
+- validaciones de negocio (ej. no permitir cantidades inválidas)
+- decisiones según tipo de movimiento (Entry / Exit / Adjustment)
+- soft delete y actualización controlada de productos
+- delegación correcta hacia repositorios (contratos)
+
+Por eso se priorizaron **unit tests**: son rápidos, aislados y verifican lo más crítico del challenge.
+
+## Qué cubren estos tests
+
+### StockService
+Se testean reglas centrales del sistema de stock:
+- **Cantidad inválida**: `quantity <= 0` debe fallar.
+- **Producto inexistente/inactivo**: no se permite operar si el producto no está activo.
+- **Salida con stock insuficiente**: en `Exit` debe rechazarse cuando no alcanza el stock.
+- **Flujo correcto**: en un caso válido, el service llama exactamente una vez al repositorio (`ApplyMovementAsync`).
+
+### ProductService
+Se testea el comportamiento esperado para Products:
+- **Paginado y filtros**: el service delega el paginado al repositorio.
+- **GetById solo activos**: delega en `GetActiveByIdAsync`.
+- **Create**: se aplica `Trim()` al nombre antes de persistir.
+- **Update**:
+  - si no existe → retorna `false` y no actualiza
+  - si existe → actualiza campos y llama al repositorio
+- **Delete**: usa soft delete (`SoftDeleteAsync`).
+
+## Qué no se testea (y por qué)
+- **Controllers**: se puede agregar con `WebApplicationFactory`/integration tests, pero no era prioritario para el challenge.
+- **Repositories / EF**: se puede cubrir con InMemory o DB real (integration tests), pero el objetivo fue validar primero la lógica y reglas de negocio.
+- **Autenticación JWT**: se validó funcionalmente con Swagger/Postman; tests automáticos serían un extra.
+
+## Herramientas
+- **xUnit**: framework de testing.
+- **Moq**: mocks para repositorios (aislar la lógica del service).
+- **Microsoft.NET.Test.Sdk + runner**: ejecución de tests en Visual Studio.
+
+## Cómo ejecutar
+Desde Visual Studio:
+- `Prueba` → `Explorador de pruebas` → `Ejecutar todo`
+
+o desde CLI:
+```bash
+dotnet test
+

@@ -13,11 +13,19 @@ namespace Stock.Api.Exceptions
 		{
 			var (statusCode, title) = exception switch
 			{
-				ConcurrencyException => (StatusCodes.Status409Conflict, "Conflicto de concurrencia"),
-				InvalidOperationException => (StatusCodes.Status400BadRequest, "Solicitud inválida"),
-				KeyNotFoundException => (StatusCodes.Status404NotFound, "No encontrado"),
-				_ => (StatusCodes.Status500InternalServerError, "Error interno")
+				ConcurrencyException =>
+					(StatusCodes.Status409Conflict, "Conflicto de concurrencia"),
+
+				InvalidOperationException =>
+					(StatusCodes.Status400BadRequest, "Operación no válida"),
+
+				KeyNotFoundException =>
+					(StatusCodes.Status404NotFound, "Recurso no encontrado"),
+
+				_ =>
+					(StatusCodes.Status500InternalServerError, "Error interno del servidor")
 			};
+
 
 			var problem = new ProblemDetails
 			{

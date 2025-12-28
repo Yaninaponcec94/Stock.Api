@@ -1,0 +1,59 @@
+/* Card base (reutilizable en toda la app) */
+.card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+/* Formulario */
+.form-card {
+  max-width: 420px;
+}
+
+/* Campos */
+.form-field {
+  margin-bottom: 14px;
+}
+
+.form-field label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.form-field input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.form-field input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* Errores */
+.field-error {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--danger);
+}
+
+.form-error {
+  margin: 12px 0;
+  padding: 10px;
+  border-radius: 4px;
+  background: #fdecea;
+  color: var(--danger);
+  font-weight: 600;
+}
+
+/* Acciones */
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}

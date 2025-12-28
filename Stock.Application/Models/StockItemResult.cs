@@ -8,6 +8,7 @@
 
 		public int MinStock { get; set; }
 		public bool IsBelowMinStock { get; set; }
+		public string ProductName { get; set; } = "";
 
 	}
 }

@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -89,6 +90,24 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+var corsPolicyName = "FrontCors";
+
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy(corsPolicyName, policy =>
+	{
+		policy
+			.WithOrigins("http://localhost:4200")
+			.AllowAnyHeader()
+			.AllowAnyMethod();
+	});
+});
+
+builder.Services.AddControllers()
+	.AddJsonOptions(options =>
+	{
+		options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+	});
 
 var app = builder.Build();
 
@@ -102,16 +121,15 @@ using (var scope = app.Services.CreateScope())
 	var db = scope.ServiceProvider.GetRequiredService<StockDbContext>();
 	await DbSeeder.SeedAsync(db);
 }
+app.UseCors(corsPolicyName);
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 
-app.UseMiddleware<ExceptionHandlingMiddleware>();
-
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseExceptionHandler();
 
 app.MapControllers();
 app.Run();
-

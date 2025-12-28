@@ -1,0 +1,32 @@
+<h2>{{ title() }}</h2>
+
+<p>Producto ID: {{ productId }}</p>
+
+<div *ngIf="error" class="alert alert-error">
+  ⚠️ {{ error }}
+</div>
+
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div style="margin: 12px 0;">
+    <label style="display:block; margin-bottom:6px;">Cantidad</label>
+    <input type="number" formControlName="quantity" style="padding:8px; width:220px;" />
+    <div *ngIf="form.controls['quantity']?.touched && form.controls['quantity']?.invalid" style="color:red; margin-top:6px;">
+      Cantidad inválida.
+    </div>
+  </div>
+
+  <div style="margin: 12px 0;">
+    <label style="display:block; margin-bottom:6px;">Motivo (opcional)</label>
+    <input type="text" formControlName="reason" style="padding:8px; width:420px;" />
+  </div>
+
+  <button type="submit" [disabled]="isLoading" style="padding:8px 12px;">
+    {{ isLoading ? 'Enviando...' : 'Confirmar' }}
+  </button>
+
+  <button type="button" [disabled]="isLoading" routerLink="/stock">
+  Cancelar
+</button>
+
+</form>

@@ -95,20 +95,29 @@ namespace Stock.Infrastructure.Repositories
 		}
 		public async Task<List<StockItemResult>> GetStockAsync()
 		{
-			return await _context.Stocks
-				.Join(_context.Products,
-					s => s.ProductId,
+			return await _context.Products
+				.Where(p => p.IsActive)
+				.GroupJoin(
+					_context.Stocks,
 					p => p.Id,
-					(s, p) => new StockItemResult
-					{
-						ProductId = s.ProductId,
-						Quantity = s.Quantity,
-						UpdatedAt = s.UpdatedAt,
-						MinStock = p.MinStock,
-						IsBelowMinStock = s.Quantity <= p.MinStock
-					})
+					s => s.ProductId,
+					(p, stocks) => new { p, stock = stocks.FirstOrDefault() }
+				)
+				.Select(x => new StockItemResult
+				{
+					ProductId = x.p.Id,
+					ProductName = x.p.Name ?? "",
+					MinStock = x.p.MinStock,
+
+					Quantity = x.stock != null ? x.stock.Quantity : 0,
+					UpdatedAt = x.stock != null ? x.stock.UpdatedAt : DateTime.UtcNow,
+
+					IsBelowMinStock =
+						(x.stock != null ? x.stock.Quantity : 0) < x.p.MinStock
+				})
 				.ToListAsync();
 		}
+
 
 
 	}

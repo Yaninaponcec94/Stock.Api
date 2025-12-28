@@ -1,0 +1,53 @@
+<div class="page">
+  <h2>{{ isEditMode ? 'Editar producto' : 'Nuevo producto' }}</h2>
+
+
+  <div *ngIf="error" class="form-error">
+    {{ error }}
+  </div>
+
+  <form
+    [formGroup]="form"
+    (ngSubmit)="submit()"
+    class="card form-card"
+  >
+    <div class="form-field">
+      <label>Nombre</label>
+      <input
+        formControlName="name"
+        type="text"
+        placeholder="Ej: Mouse inalámbrico"
+      />
+      <div
+        *ngIf="form.controls['name']?.touched && form.controls['name']?.invalid"
+        class="field-error"
+      >
+        Nombre requerido (mínimo 2 caracteres)
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label>Stock mínimo</label>
+      <input
+        formControlName="minStock"
+        type="number"
+      />
+      <div
+        *ngIf="form.controls['minStock']?.touched && form.controls['minStock']?.invalid"
+        class="field-error"
+      >
+        MinStock inválido (≥ 0)
+      </div>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="primary" [disabled]="isLoading">
+            {{ isLoading ? (isEditMode ? 'Guardando...' : 'Creando...') : (isEditMode ? 'Guardar cambios' : 'Crear') }}
+        </button>
+
+      <button type="button" (click)="cancel()" [disabled]="isLoading">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>

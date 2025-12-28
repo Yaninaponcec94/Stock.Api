@@ -1,0 +1,99 @@
+<div class="page">
+<h2>Productos</h2>
+
+<div class="top-bar">
+  <!-- Buscador -->
+  <div class="search-inline">
+    <label>Buscar por nombre</label>
+    <input
+      type="text"
+      [formControl]="searchCtrl"
+      placeholder="Ej: mouse, teclado, monitor..."
+    />
+    <button
+      (click)="searchCtrl.setValue('')"
+      [disabled]="isLoading || !searchCtrl.value">
+      Borrar
+    </button>
+  </div>
+
+  <!-- Botones admin -->
+  <div class="top-actions">
+    <button
+      *ngIf="isAdmin"
+      type="button"
+      class="primary"
+      [routerLink]="['/products/create']">
+      Nuevo producto
+    </button>
+
+    <button
+      *ngIf="isAdmin"
+      type="button"
+      class="primary"
+      [routerLink]="['/stock']">
+      Movimiento de stock
+    </button>
+
+    <button
+      type="button"
+      class="danger"
+      (click)="logout()">
+      Cerrar sesión
+    </button>
+
+  </div>
+</div>
+
+
+<div style="display:flex; gap:10px; align-items:center; margin-bottom:12px;">
+  <button (click)="prevPage()" [disabled]="isLoading || page <= 1">Anterior</button>
+  <button (click)="nextPage()" [disabled]="isLoading || page >= totalPages">Siguiente</button>
+  <button (click)="refresh()" [disabled]="isLoading">Refrescar</button>
+
+  <span style="margin-left:12px;">
+    Página {{ page }} / {{ totalPages }} (Total: {{ total }})
+  </span>
+</div>
+
+<hr />
+
+<div *ngIf="isLoading" style="font-weight:bold; margin-top: 12px;">Cargando...</div>
+<div *ngIf="!isLoading && error" style="color:red; margin-top: 12px;">{{ error }}</div>
+
+<div *ngIf="!isLoading && !error">
+  <table *ngIf="products.length > 0" border="1" cellpadding="8" cellspacing="0">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th *ngIf="isAdmin">Stock mínimo</th>
+
+      <th>Activo</th>
+      <th *ngIf="isAdmin">Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let p of products">
+      <td>{{ p.id }}</td>
+      <td>{{ p.name || '—' }}</td>
+      <td *ngIf="isAdmin">{{ p.minStock }}</td>
+
+      <td>{{ p.isActive ? 'Sí' : 'No' }}</td>
+
+      <td *ngIf="isAdmin">
+        <a [routerLink]="['/products/edit', p.id]">Editar</a>
+        |
+        <button type="button" (click)="softDelete(p.id)">Desactivar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+  <div *ngIf="products.length === 0" style="margin-top:12px;">
+    No hay productos.
+  </div>
+</div>
+</div>

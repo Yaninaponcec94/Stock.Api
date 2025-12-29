@@ -166,18 +166,6 @@ Angular - TypeScript - SCSS - Angular Router - HttpClient - JWT (Authorization) 
 
 🧱 Estructura del frontend
 El frontend se organiza siguiendo una separación clara por responsabilidades:
-frontend/
- ├── core/
- │   ├── auth/
- │   ├── guards/
- │   ├── interceptors/
- │   └── services/
- ├── features/
- │   ├── auth/
- │   ├── products/
- │   └── stock/
- ├── environments/
- └── app/
 
 🔹 Core
 Contiene funcionalidades transversales a toda la aplicación:

@@ -164,7 +164,9 @@ Valida la regla de **alerta de stock mínimo** como flag en `GET /api/stock`:
 ### Desde CLI
 ```bash
 dotnet test
+
 __________________________________________________________________________________________________________________________________________________________________________________________
+
 🎨 Frontend (Angular)
 El frontend del proyecto está desarrollado con Angular, y consume la API REST del backend para la gestión de productos y movimientos de stock.
 El objetivo del frontend es ofrecer una interfaz clara y funcional que permita validar el flujo completo de la aplicación: autenticación, consumo de endpoints, manejo de errores y control de permisos.

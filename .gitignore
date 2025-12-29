@@ -1,5 +1,38 @@
+# =========================
+# Visual Studio / .NET
+# =========================
+.vs/
+**/.vs/
+
+bin/
+obj/
 **/bin/
 **/obj/
-node_modules/
-dist/
-.angular/
+
+# user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# build results / logs
+*.log
+
+# =========================
+# Frontend (Angular)
+# =========================
+frontend/node_modules/
+**/node_modules/
+frontend/dist/
+**/dist/
+frontend/.angular/
+**/.angular/
+
+# VS Code (opcional)
+.vscode/
+
+# =========================
+# OS
+# =========================
+.DS_Store
+Thumbs.db

@@ -164,3 +164,79 @@ Valida la regla de **alerta de stock mínimo** como flag en `GET /api/stock`:
 ### Desde CLI
 ```bash
 dotnet test
+__________________________________________________________________________________________________________________________________________________________________________________________
+🎨 Frontend (Angular)
+El frontend del proyecto está desarrollado con Angular, y consume la API REST del backend para la gestión de productos y movimientos de stock.
+El objetivo del frontend es ofrecer una interfaz clara y funcional que permita validar el flujo completo de la aplicación: autenticación, consumo de endpoints, manejo de errores y control de permisos.
+
+🚀 Tecnologías utilizadas
+Angular - TypeScript - SCSS - Angular Router - HttpClient - JWT (Authorization) - Guards e Interceptors
+
+🧱 Estructura del frontend
+El frontend se organiza siguiendo una separación clara por responsabilidades:
+frontend/
+ ├── core/
+ │   ├── auth/
+ │   ├── guards/
+ │   ├── interceptors/
+ │   └── services/
+ ├── features/
+ │   ├── auth/
+ │   ├── products/
+ │   └── stock/
+ ├── environments/
+ └── app/
+
+🔹 Core
+Contiene funcionalidades transversales a toda la aplicación:
+AuthService: manejo de login y token.
+Guards:
+- AuthGuard: protege rutas autenticadas.
+- RoleGuard: restringe acceso según rol (Admin).
+Interceptors:
+- JwtInterceptor: adjunta el token a cada request.
+- ErrorInterceptor: manejo centralizado de errores HTTP.
+Services compartidos para comunicación con la API.
+
+🔹 Features
+Agrupa la lógica por funcionalidad:
+Auth: login.
+Products:
+listado
+- alta / edición
+Stock:
+- visualización de stock
+- registro de movimientos (Entry / Exit)
+
+🔐 Autenticación y seguridad
+
+Login con credenciales contra el backend.
+Token JWT almacenado y enviado automáticamente vía interceptor.
+Protección de rutas mediante guards.
+Acceso restringido a funcionalidades de administración.
+
+🔁 Comunicación con el backend
+
+El frontend consume la API REST mediante HttpClient, respetando los contratos definidos en los DTOs del backend.
+Se validan:
+respuestas exitosas
+errores HTTP
+mensajes de negocio (ej. producto inactivo, stock insuficiente)
+
+📌 Estado actual del frontend
+
+✔ Login funcional
+✔ Listado de productos
+✔ Alta / edición de productos
+✔ Visualización de stock
+✔ Registro de movimientos de stock
+✔ Guards e interceptors configurados
+✔ Integración completa con el backend
+
+📝 Notas
+
+El frontend fue desarrollado priorizando:
+- claridad del código
+- separación de responsabilidades
+- alineación con la arquitectura del backend
+No se incorporaron librerías innecesarias ni soluciones mágicas, manteniendo el proyecto simple, mantenible y fácil de extender.

@@ -81,7 +81,6 @@ export class StockMovementPage implements OnInit, OnDestroy {
           const detail = err?.error?.detail;
           const title = err?.error?.title;
 
-          // prioridad: detail (mensaje real)
           this.error =
             detail ||
             err?.error?.message ||

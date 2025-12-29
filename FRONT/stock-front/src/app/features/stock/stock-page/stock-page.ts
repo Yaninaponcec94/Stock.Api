@@ -47,7 +47,6 @@ export class StockPage implements OnInit {
         })
       )
       .subscribe((res) => {
-        // si el backend no manda isBelowMinStock, lo calculamos
         this.items = (res ?? []).map((x: any) => ({
           ...x,
           isBelowMinStock:

@@ -1,16 +1,14 @@
-/* 🎨 Paleta base */
 :root {
-  --primary: #1976d2;       // azul
+  --primary: #1976d2;       
   --primary-hover: #115293;
-  --success: #2e7d32;       // verde
-  --danger: #c62828;        // rojo
-  --warning: #f9a825;       // amarillo
+  --success: #2e7d32;       
+  --danger: #c62828;        
+  --warning: #f9a825;       
   --bg-light: #f5f5f5;
   --border: #e0e0e0;
   --text: #333;
 }
 
-/* Reset básico */
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
@@ -98,7 +96,7 @@ button:disabled {
 .top-bar {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end; /* clave: misma altura */
+  align-items: flex-end; 
   margin-bottom: 12px;
   gap: 16px;
 }

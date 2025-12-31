@@ -24,7 +24,6 @@ namespace Stock.Api.Controllers
 			return Ok(stock);
 		}
 
-		[Authorize(Roles = "Admin")]
 		[HttpPost("entry")]
 		public async Task<IActionResult> Entry([FromBody] CreateStockMovementDto dto)
 		{
@@ -32,7 +31,6 @@ namespace Stock.Api.Controllers
 			return Ok(result);
 		}
 
-		[Authorize(Roles = "Admin")]
 		[HttpPost("exit")]
 		public async Task<IActionResult> Exit([FromBody] CreateStockMovementDto dto)
 		{
@@ -47,5 +45,13 @@ namespace Stock.Api.Controllers
 			var result = await _service.CreateMovementAsync(dto.ProductId, StockMovementType.Adjustment, dto.Quantity, dto.Reason);
 			return Ok(result);
 		}
+
+		[HttpGet("movements")]
+		public async Task<IActionResult> GetMovements([FromQuery] int? productId, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+		{
+			var result = await _service.GetMovementsAsync(productId, page, pageSize);
+			return Ok(result);
+		}
+
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Stock.Application.DTOs;
 using Stock.Application.Models;
 
 namespace Stock.Application.Interfaces
@@ -17,7 +18,7 @@ namespace Stock.Application.Interfaces
 
 		Task<List<StockItemResult>> GetStockAsync();
 
-
+		Task<PagedResult<StockMovementHistoryDto>> GetMovementsAsync(int? productId, int page, int pageSize);
 
 
 	}

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Stock.Application.DTOs;
 using Stock.Application.Exceptions;
 using Stock.Application.Interfaces;
 using Stock.Application.Models;
@@ -118,6 +119,47 @@ namespace Stock.Infrastructure.Repositories
 				.ToListAsync();
 		}
 
+		public async Task<PagedResult<StockMovementHistoryDto>> GetMovementsAsync(int? productId, int page, int pageSize)
+		{
+			page = page < 1 ? 1 : page;
+			pageSize = pageSize < 1 ? 10 : pageSize;
+			if (pageSize > 50) pageSize = 50;
+
+			var query = _context.StockMovements
+				.AsNoTracking()
+				.Include(m => m.Product)
+				.AsQueryable();
+
+			if (productId.HasValue)
+				query = query.Where(m => m.ProductId == productId.Value);
+
+			var total = await query.CountAsync();
+
+			var items = await query
+				.OrderByDescending(m => m.Date)
+				.Skip((page - 1) * pageSize)
+				.Take(pageSize)
+				.Select(m => new StockMovementHistoryDto
+				{
+					Id = m.Id,
+					ProductId = m.ProductId,
+					ProductName = m.Product.Name,
+					Type = m.Type.ToString(),
+					Quantity = m.Quantity,
+					Reason = m.Reason,
+					Date = m.Date
+				})
+				.ToListAsync();
+
+			return new PagedResult<StockMovementHistoryDto>
+			{
+				Items = items,
+				TotalItems = total,
+				Page = page,
+				PageSize = pageSize
+			};
+
+		}
 
 
 	}

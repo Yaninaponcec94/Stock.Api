@@ -1,4 +1,5 @@
-﻿using Stock.Application.Interfaces;
+﻿using Stock.Application.DTOs;
+using Stock.Application.Interfaces;
 using Stock.Application.Models;
 
 
@@ -34,7 +35,9 @@ namespace Stock.Application.Services
 		public Task<List<StockItemResult>> GetStockAsync()
     => _repo.GetStockAsync();
 
-		
+
+		public Task<PagedResult<StockMovementHistoryDto>> GetMovementsAsync(int? productId, int page, int pageSize)
+	=> _repo.GetMovementsAsync(productId, page, pageSize);
 
 
 

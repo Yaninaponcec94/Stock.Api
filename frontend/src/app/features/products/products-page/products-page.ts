@@ -2,13 +2,13 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject, of } from 'rxjs';
 import { switchMap, catchError, finalize, takeUntil, tap } from 'rxjs/operators';
-import { ProductsService, Product, PagedResult } from '../../../core/services/products.service';
+import { ProductsService } from '../../../core/services/products.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
-
-
+import { Product } from '../../../shared/models/product.model';
+import { PagedResult } from '../../../shared/models/paged-result.model';
 @Component({
   selector: 'app-products-page',
   standalone: true,

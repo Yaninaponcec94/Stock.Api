@@ -1,0 +1,106 @@
+.type-entry {
+  color: #2e7d32; 
+  font-weight: 600;
+}
+
+.type-exit {
+  color: #c62828; 
+  font-weight: 600;
+}
+
+.type-adjustment {
+  color: #f57c00; 
+  font-weight: 600;
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 24px;
+  margin-bottom: 16px;
+}
+
+.history-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.history-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.history-filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.btn-filter {
+  padding: 10px 18px;          // ⬅️ más grandes
+  border-radius: 999px;        // ⬅️ pill moderno
+  border: 1px solid #1976d2;
+  background: #1976d2;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-filter:hover {
+  background: #1565c0;
+}
+
+.btn-filter.active {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.btn-danger {
+  padding: 10px 20px;          // ⬅️ más grande
+  border-radius: 999px;        // ⬅️ pill
+  border: 1px solid #c62828;
+  background: #c62828;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-danger:hover {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.history-wrap {
+  margin-top: 24px;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+
+  thead {
+    background: #f5f5f5;
+  }
+
+  th, td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+  }
+}
+
+.history-pagination {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 16px;
+}

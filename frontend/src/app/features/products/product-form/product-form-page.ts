@@ -3,7 +3,10 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subject, finalize, takeUntil, Observable } from 'rxjs';
-import { ProductsService, Product, CreateProductDto, UpdateProductDto } from '../../../core/services/products.service';
+import { ProductsService} from '../../../core/services/products.service';
+import { Product } from '../../../shared/models/product.model';
+import { CreateProductDto } from '../../products/models/create-product.dto';
+import { UpdateProductDto } from '../../products/models/update-product.dto';
 
 @Component({
   selector: 'app-product-form-page',

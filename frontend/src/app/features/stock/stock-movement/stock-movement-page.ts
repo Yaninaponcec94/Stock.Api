@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subject, finalize, takeUntil } from 'rxjs';
-import { StockService } from '../stock.service';
+import { StockService } from '../../../core/services/stock.service';
 
 type Mode = 'entry' | 'exit' | 'adjustment';
 
@@ -78,19 +78,9 @@ export class StockMovementPage implements OnInit, OnDestroy {
       subscribe({
         next: () => this.router.navigateByUrl('/stock'),
         error: (err: any) => {
-          const detail = err?.error?.detail;
-          const title = err?.error?.title;
-
-          this.error =
-            detail ||
-            err?.error?.message ||
-            title ||
-            err?.message ||
-            'Error aplicando movimiento';
-
+          this.error = this.extractApiError(err);
           this.cdr.detectChanges();
-        },
-
+          },
       });
 
   }
@@ -100,6 +90,26 @@ export class StockMovementPage implements OnInit, OnDestroy {
     if (this.mode === 'exit') return 'Salida de stock';
     return 'Ajuste de stock';
   }
+
+  private extractApiError(err: any): string {
+  const e = err?.error;
+
+  const fv = e?.errors;
+  if (fv && typeof fv === 'object') {
+    const firstKey = Object.keys(fv)[0];
+    const firstVal = fv[firstKey];
+    const firstMsg = Array.isArray(firstVal) ? firstVal[0] : firstVal;
+    if (firstMsg) return String(firstMsg);
+    return 'Datos inválidos. Revisá los campos.';
+  }
+
+  if (typeof e?.message === 'string') return e.message;
+  if (typeof e?.detail === 'string') return e.detail;
+  if (typeof e?.title === 'string') return e.title;
+
+  return err?.message || 'Error aplicando movimiento';
+}
+
 
   ngOnDestroy(): void {
     this.destroy$.next();

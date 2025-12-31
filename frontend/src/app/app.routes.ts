@@ -32,8 +32,7 @@ export const routes: Routes = [
 
   {
     path: 'stock',
-    canActivate: [authGuard, roleGuard],
-    data: { roles: ['Admin'] },
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./features/stock/stock-page/stock-page').then((m) => m.StockPage),
   },

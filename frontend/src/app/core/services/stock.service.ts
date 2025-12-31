@@ -1,24 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-
-export interface StockItem {
-  productId: number;
-  productName: string;
-  quantity: number;
-  updatedAt: string;
-  minStock: number;
-  isBelowMinStock: boolean;
-}
-
-export type MovementType = 'Entry' | 'Exit' | 'Adjustment';
-
-export interface CreateStockMovementDto {
-  productId: number;
-  type: MovementType;
-  quantity: number;
-  reason?: string;
-}
+import { StockItem } from '../../shared/models/stock-item.model';
+import { CreateStockMovementDto } from '../../features/stock/models/create-stock-movement.dto';
 
 @Injectable({ providedIn: 'root' })
 export class StockService {
@@ -42,4 +26,10 @@ export class StockService {
     return this.http.post(`${this.baseUrl}/adjustment`, { ...dto, type: 'Adjustment' as const });
   }
 
+  getMovements(productId?: number, page = 1, pageSize = 10) {
+  const params: any = { page, pageSize };
+  if (productId) params.productId = productId;
+
+  return this.http.get<any>(`${this.baseUrl}/movements`, { params });
+}
 }

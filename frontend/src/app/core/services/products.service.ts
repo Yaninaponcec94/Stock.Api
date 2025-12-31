@@ -1,30 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-
-export interface Product {
-  id: number;
-  name: string;
-  minStock: number;
-  isActive: boolean;
-}
-export interface CreateProductDto {
-  name: string;
-  minStock: number;
-}
-export interface PagedResult<T> {
-  items: T[];
-  page: number;
-  pageSize: number;
-  totalItems: number;
-  totalPages: number;
-}
-
-export interface UpdateProductDto {
-  name: string;
-  minStock: number;
-  isActive: boolean; 
-}
+import { Product } from '../../shared/models/product.model';
+import { PagedResult } from '../../shared/models/paged-result.model';
+import { CreateProductDto } from '../../features/products/models/create-product.dto';
+import { UpdateProductDto } from '../../features/products/models/update-product.dto';
 
 @Injectable({ providedIn: 'root' })
 export class ProductsService {

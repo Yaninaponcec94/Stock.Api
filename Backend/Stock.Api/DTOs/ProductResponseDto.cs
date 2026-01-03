@@ -1,4 +1,4 @@
-﻿namespace Stock.Application.DTOs
+﻿namespace Stock.Api.DTOs
 
 {
 	public class ProductResponseDto

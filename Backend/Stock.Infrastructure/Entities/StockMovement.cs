@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Stock.Application.Models;
 
 namespace Stock.Infrastructure.Entities
 {
@@ -11,7 +12,7 @@ namespace Stock.Infrastructure.Entities
 		public int Id { get; set; }
 
 		public int ProductId { get; set; }
-		public MovementType Type { get; set; }
+		public StockMovementType Type { get; set; }
 
 		public int Quantity { get; set; }
 

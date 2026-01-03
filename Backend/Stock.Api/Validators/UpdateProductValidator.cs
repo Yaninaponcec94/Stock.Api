@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentValidation;
-using Stock.Application.DTOs;
+using Stock.Api.DTOs;
 
 namespace Stock.Api.Validators
 {

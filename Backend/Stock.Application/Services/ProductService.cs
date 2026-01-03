@@ -1,5 +1,4 @@
-﻿using Stock.Application.DTOs;
-using Stock.Application.Interfaces;
+﻿using Stock.Application.Interfaces;
 using Stock.Application.Models;
 
 namespace Stock.Application.Services
@@ -13,63 +12,39 @@ namespace Stock.Application.Services
 			_repo = repo;
 		}
 
-		public async Task<PagedResult<ProductResponseDto>> GetAllAsync(ProductFilter filter)
-		{
-			var paged = await _repo.GetPagedActiveAsync(filter);
+		public Task<PagedResult<Product>> GetAllAsync(ProductFilter filter)
+			=> _repo.GetPagedActiveAsync(filter);
 
-			// Mapeo en service (no en controller)
-			var mapped = new PagedResult<ProductResponseDto>
-			{
-				Page = paged.Page,
-				PageSize = paged.PageSize,
-				TotalItems = paged.TotalItems,
-				Items = paged.Items.Select(ToResponse).ToList()
-			};
+		public Task<Product?> GetByIdAsync(int id)
+			=> _repo.GetActiveByIdAsync(id);
 
-			return mapped;
-		}
-
-		public async Task<ProductResponseDto?> GetByIdAsync(int id)
-		{
-			var product = await _repo.GetActiveByIdAsync(id);
-			return product is null ? null : ToResponse(product);
-		}
-
-		public async Task<ProductResponseDto> CreateAsync(CreateProductDto dto)
+		public async Task<Product> CreateAsync(string name, int minStock)
 		{
 			var entity = new Product
 			{
-				Name = dto.Name.Trim(),
+				Name = name.Trim(),
 				IsActive = true,
-				MinStock = dto.MinStock
+				MinStock = minStock
 			};
 
 			await _repo.AddAsync(entity);
-			return ToResponse(entity);
+			return entity;
 		}
 
-		public async Task<bool> UpdateAsync(int id, UpdateProductDto dto)
+		public async Task<bool> UpdateAsync(int id, string name, bool isActive, int minStock)
 		{
 			var existing = await _repo.GetActiveByIdAsync(id);
 			if (existing == null) return false;
 
-			existing.Name = dto.Name.Trim();
-			existing.IsActive = dto.IsActive;
-			existing.MinStock = dto.MinStock;
+			existing.Name = name.Trim();
+			existing.IsActive = isActive;
+			existing.MinStock = minStock;
 
 			await _repo.UpdateAsync(existing);
 			return true;
 		}
 
-		public async Task<bool> DeleteAsync(int id)
-			=> await _repo.SoftDeleteAsync(id);
-
-		private static ProductResponseDto ToResponse(Product p) => new()
-		{
-			Id = p.Id,
-			Name = p.Name,
-			MinStock = p.MinStock,
-			IsActive = p.IsActive
-		};
+		public Task<bool> DeleteAsync(int id)
+			=> _repo.SoftDeleteAsync(id);
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Stock.Application.DTOs;
 using Stock.Application.Exceptions;
 using Stock.Application.Interfaces;
 using Stock.Application.Models;
@@ -27,39 +26,30 @@ namespace Stock.Infrastructure.Repositories
 			return stock?.Quantity ?? 0;
 		}
 
-		public async Task<ProductStockResult> ApplyMovementAsync(int productId, string type, int quantity, string? reason)
+		public async Task<ProductStockResult> ApplyMovementAsync(int productId, StockMovementType type, int quantity, string? reason)
 		{
-			if (!Enum.TryParse<MovementType>(type, out var movementType))
-				throw new InvalidOperationException("Tipo de movimiento inválido");
-
 			var stock = await _context.Stocks.FirstOrDefaultAsync(s => s.ProductId == productId);
 			if (stock == null)
 			{
-				stock = new ProductStock
-				{
-					ProductId = productId,
-					Quantity = 0,
-					UpdatedAt = DateTime.UtcNow
-				};
+				stock = new ProductStock { ProductId = productId, Quantity = 0, UpdatedAt = DateTime.UtcNow };
 				_context.Stocks.Add(stock);
 			}
 
 			var newQty = stock.Quantity;
 
-			switch (movementType)
+			switch (type)
 			{
-				case MovementType.Entry:
+				case StockMovementType.Entry:
 					newQty += quantity;
 					break;
 
-				case MovementType.Exit:
-
+				case StockMovementType.Exit:
 					if (quantity > stock.Quantity)
 						throw new InvalidOperationException("Stock insuficiente para realizar la salida");
 					newQty -= quantity;
 					break;
 
-				case MovementType.Adjustment:
+				case StockMovementType.Adjustment:
 					newQty = quantity;
 					break;
 			}
@@ -67,7 +57,7 @@ namespace Stock.Infrastructure.Repositories
 			var movement = new StockMovement
 			{
 				ProductId = productId,
-				Type = movementType,
+				Type = type,
 				Quantity = quantity,
 				Reason = reason,
 				Date = DateTime.UtcNow
@@ -78,22 +68,15 @@ namespace Stock.Infrastructure.Repositories
 			stock.Quantity = newQty;
 			stock.UpdatedAt = DateTime.UtcNow;
 
-			try
-			{
-				await _context.SaveChangesAsync();
-			}
+			try { await _context.SaveChangesAsync(); }
 			catch (DbUpdateConcurrencyException)
 			{
 				throw new ConcurrencyException("El stock fue actualizado por otra operación. Reintente.");
 			}
 
-			return new ProductStockResult
-			{
-				ProductId = productId,
-				NewQuantity = stock.Quantity,
-				MovementId = movement.Id
-			};
+			return new ProductStockResult { ProductId = productId, NewQuantity = stock.Quantity, MovementId = movement.Id };
 		}
+
 		public async Task<List<StockItemResult>> GetStockAsync()
 		{
 			return await _context.Products
@@ -119,7 +102,7 @@ namespace Stock.Infrastructure.Repositories
 				.ToListAsync();
 		}
 
-		public async Task<PagedResult<StockMovementHistoryDto>> GetMovementsAsync(int? productId, int page, int pageSize)
+		public async Task<PagedResult<StockMovementHistory>> GetMovementsAsync(int? productId, int page, int pageSize)
 		{
 			page = page < 1 ? 1 : page;
 			pageSize = pageSize < 1 ? 10 : pageSize;
@@ -139,7 +122,7 @@ namespace Stock.Infrastructure.Repositories
 				.OrderByDescending(m => m.Date)
 				.Skip((page - 1) * pageSize)
 				.Take(pageSize)
-				.Select(m => new StockMovementHistoryDto
+				.Select(m => new StockMovementHistory
 				{
 					Id = m.Id,
 					ProductId = m.ProductId,
@@ -151,7 +134,7 @@ namespace Stock.Infrastructure.Repositories
 				})
 				.ToListAsync();
 
-			return new PagedResult<StockMovementHistoryDto>
+			return new PagedResult<StockMovementHistory>
 			{
 				Items = items,
 				TotalItems = total,

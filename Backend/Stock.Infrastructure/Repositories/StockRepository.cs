@@ -95,7 +95,8 @@ namespace Stock.Infrastructure.Repositories
 					UpdatedAt = x.stock != null ? x.stock.UpdatedAt : DateTime.UtcNow,
 
 					IsBelowMinStock =
-						(x.stock != null ? x.stock.Quantity : 0) < x.p.MinStock
+						(x.stock != null ? x.stock.Quantity : 0) <= x.p.MinStock
+
 				})
 				.ToListAsync();
 		}

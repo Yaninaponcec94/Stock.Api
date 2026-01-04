@@ -1,6 +1,6 @@
-﻿using Stock.Application.DTOs;
-using Stock.Api.Validators;
+﻿using Stock.Api.Validators;
 using Xunit;
+using Stock.Api.DTOs;
 
 namespace Stock.Tests
 {

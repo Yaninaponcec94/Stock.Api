@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
 using Stock.Application.Interfaces;
 using Stock.Application.Models;
 using Stock.Application.Services;
@@ -64,8 +59,8 @@ namespace Stock.Tests
             var repo = new Mock<IStockRepository>();
             repo.Setup(r => r.ProductExistsAndActiveAsync(1)).ReturnsAsync(true);
 
-            repo.Setup(r => r.ApplyMovementAsync(1, "Entry", 5, "ok"))
-                .ReturnsAsync(new ProductStockResult { ProductId = 1, NewQuantity = 5, MovementId = 99 });
+			repo.Setup(r => r.ApplyMovementAsync(1, StockMovementType.Entry, 5, "ok"))
+				.ReturnsAsync(new ProductStockResult { ProductId = 1, NewQuantity = 5, MovementId = 99 });
 
             var service = new StockService(repo.Object);
 
@@ -74,8 +69,8 @@ namespace Stock.Tests
 			Assert.Equal(1, result.ProductId);
             Assert.Equal(5, result.NewQuantity);
 
-            repo.Verify(r => r.ApplyMovementAsync(1, "Entry", 5, "ok"), Times.Once);
+			repo.Verify(r => r.ApplyMovementAsync(1, StockMovementType.Entry, 5, "ok"), Times.Once);
 
-        }
+		}
     }
 }

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
 using Stock.Application.Interfaces;
 using Stock.Application.Models;
 using Stock.Application.Services;
 using Xunit;
-using Stock.Application.DTOs;
 
 namespace Stock.Tests
 {
@@ -59,13 +53,7 @@ namespace Stock.Tests
 			var repo = new Mock<IProductRepository>();
 			var service = new ProductService(repo.Object);
 
-			var dto = new CreateProductDto
-			{
-				Name = "  Teclado   ",
-				MinStock = 2
-			};
-
-			var created = await service.CreateAsync(dto);
+			var created = await service.CreateAsync("  Teclado   ", 2);
 
 			Assert.NotNull(created);
 			Assert.Equal("Teclado", created.Name);
@@ -83,12 +71,7 @@ namespace Stock.Tests
 
 			repo.Setup(r => r.GetActiveByIdAsync(10)).ReturnsAsync((Product?)null);
 
-			var ok = await service.UpdateAsync(10, new UpdateProductDto
-			{
-				Name = "X",
-				IsActive = true,
-				MinStock = 0
-			});
+			var ok = await service.UpdateAsync(10, "X", true, 0);
 
 
 			Assert.False(ok);
@@ -104,12 +87,7 @@ namespace Stock.Tests
 
 			repo.Setup(r => r.GetActiveByIdAsync(3)).ReturnsAsync(existing);
 
-			var ok = await service.UpdateAsync(3, new UpdateProductDto
-			{
-				Name = "  Nuevo  ",
-				IsActive = false,
-				MinStock = 9
-			});
+			var ok = await service.UpdateAsync(3, "  Nuevo  ", false, 9);
 
 
 			Assert.True(ok);

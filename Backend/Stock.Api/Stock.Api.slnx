@@ -2,8 +2,9 @@
   <Folder Name="/Elementos de la solución/">
     <File Path="README.md" />
   </Folder>
+  <Project Path="../Stock.Api.Tests/Stock.Api.Tests.csproj" Id="1f69780d-37b4-4c6e-aecb-df591a38def5" />
   <Project Path="../Stock.Application/Stock.Application.csproj" />
   <Project Path="../Stock.Infrastructure/Stock.Infrastructure.csproj" />
-  <Project Path="../Stock.Tests/Stock.Tests.csproj" Id="24dae71b-a194-41ad-a8bf-ee34d0b28a62" />
+  <Project Path="../Stock.Tests/Stock.Application.Tests.csproj" Id="24dae71b-a194-41ad-a8bf-ee34d0b28a62" />
   <Project Path="Stock.Api.csproj" />
 </Solution>

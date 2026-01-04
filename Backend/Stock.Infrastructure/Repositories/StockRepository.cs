@@ -44,8 +44,6 @@ namespace Stock.Infrastructure.Repositories
 					break;
 
 				case StockMovementType.Exit:
-					if (quantity > stock.Quantity)
-						throw new InvalidOperationException("Stock insuficiente para realizar la salida");
 					newQty -= quantity;
 					break;
 

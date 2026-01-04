@@ -60,5 +60,9 @@ export class AuthService {
     return localStorage.getItem(ROLE_KEY);
   }
 
+  isAdmin(): boolean {
+  return (this.getRole() ?? '').toLowerCase() === 'admin';
+}
+
   
 }

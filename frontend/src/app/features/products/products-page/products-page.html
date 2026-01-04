@@ -11,7 +11,7 @@
     />
     <button
       (click)="searchCtrl.setValue('')"
-      [disabled]="isLoading || !searchCtrl.value">
+      [disabled]="(isLoading$ | async) || !searchCtrl.value">
       Borrar
     </button>
   </div>
@@ -42,55 +42,61 @@
   </div>
 </div>
 
+<ng-container *ngIf="totalPages$ | async as totalPages">
+  <button (click)="prevPage()" [disabled]="(isLoading$ | async) || page <= 1">Anterior</button>
+<button (click)="nextPage(totalPages)">Siguiente</button>
 
-<div style="display:flex; gap:10px; align-items:center; margin-bottom:12px;">
-  <button (click)="prevPage()" [disabled]="isLoading || page <= 1">Anterior</button>
-  <button (click)="nextPage()" [disabled]="isLoading || page >= totalPages">Siguiente</button>
-  <button (click)="refresh()" [disabled]="isLoading">Refrescar</button>
+  <button (click)="refresh()" [disabled]="(isLoading$ | async)">Refrescar</button>
 
-  <span style="margin-left:12px;">
-    Página {{ page }} / {{ totalPages }} (Total: {{ total }})
+  <span>
+    Página {{ page }} / {{ totalPages }} (Total: {{ total$ | async }})
   </span>
-</div>
+</ng-container>
 
 <hr />
 
-<div *ngIf="isLoading" style="font-weight:bold; margin-top: 12px;">Cargando...</div>
-<div *ngIf="!isLoading && error" style="color:red; margin-top: 12px;">{{ error }}</div>
+<div *ngIf="isLoading$ | async">Cargando...</div>
 
-<div *ngIf="!isLoading && !error">
-  <table *ngIf="products.length > 0" border="1" cellpadding="8" cellspacing="0">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Nombre</th>
-      <th *ngIf="isAdmin">Stock mínimo</th>
-
-      <th>Activo</th>
-      <th *ngIf="isAdmin">Acciones</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr *ngFor="let p of products">
-      <td>{{ p.id }}</td>
-      <td>{{ p.name || '—' }}</td>
-      <td *ngIf="isAdmin">{{ p.minStock }}</td>
-
-      <td>{{ p.isActive ? 'Sí' : 'No' }}</td>
-
-      <td *ngIf="isAdmin">
-        <a [routerLink]="['/products/edit', p.id]">Editar</a>
-        |
-        <button type="button" (click)="softDelete(p.id)">Desactivar</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-  <div *ngIf="products.length === 0" style="margin-top:12px;">
-    No hay productos.
-  </div>
+<div *ngIf="!(isLoading$ | async) && (error$ | async) as error">
+  {{ error }}
 </div>
+
+
+<div *ngIf="!(isLoading$ | async) && !(error$ | async)">
+  <ng-container *ngIf="products$ | async as products">
+    <table *ngIf="products.length > 0" border="1" cellpadding="8" cellspacing="0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th *ngIf="isAdmin">Stock mínimo</th>
+          <th>Activo</th>
+          <th *ngIf="isAdmin">Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let p of products">
+          <td>{{ p.id }}</td>
+          <td>{{ p.name || '—' }}</td>
+          <td *ngIf="isAdmin">{{ p.minStock }}</td>
+          <td>{{ p.isActive ? 'Sí' : 'No' }}</td>
+
+          <td *ngIf="isAdmin">
+            <a [routerLink]="['/products/edit', p.id]">Editar</a>
+            |
+            <button type="button" (click)="softDelete(p.id)">Desactivar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="products.length === 0" style="margin-top:12px;">
+      No hay productos.
+    </div>
+  </ng-container>
+</div>
+
+
+
 </div>

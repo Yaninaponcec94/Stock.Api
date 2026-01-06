@@ -12,49 +12,71 @@ export const routes: Routes = [
   },
 
   {
-    path: 'products',
+    path: '',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./features/products/products-page/products-page').then(
-        (m) => m.ProductsPage
-      ),
-  },
+      import('./core/ui/layout/layout.component').then((m) => m.LayoutComponent),
+    children: [
+      { path: 'products',
+        loadComponent: () =>
+          import('./features/products/products-page/products-page').then((m) => m.ProductsPage),
+      },
 
-  {
-    path: 'products/create',
-    canActivate: [authGuard, roleGuard],
-    data: { roles: ['Admin'] },
-    loadComponent: () =>
-      import('./features/products/product-form/product-form-page').then(
-        (m) => m.ProductFormPage
-      ),
-  },
+      { path: 'products/create',
+        canActivate: [roleGuard],
+        data: { roles: ['Admin'] },
+        loadComponent: () =>
+          import('./features/products/product-form/product-form-page').then((m) => m.ProductFormPage),
+      },
 
-  {
-    path: 'stock',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/stock/stock-page/stock-page').then((m) => m.StockPage),
-  },
+      { path: 'products/edit/:id',
+        canActivate: [roleGuard],
+        data: { roles: ['Admin'] },
+        loadComponent: () =>
+          import('./features/products/product-form/product-form-page').then((m) => m.ProductFormPage),
+      },
 
-  {
-    path: 'stock/:mode/:productId',
-    canActivate: [authGuard, roleGuard],
-    data: { roles: ['Admin'] },
-    loadComponent: () =>
-      import('./features/stock/stock-movement/stock-movement-page').then(
-        (m) => m.StockMovementPage
-      ),
-  },
+      { path: 'stock',
+        loadComponent: () =>
+          import('./features/stock/stock-page/stock-page').then((m) => m.StockPage),
+      },
 
-  {
-  path: 'products/edit/:id',
-  canActivate: [authGuard, roleGuard],
-  data: { roles: ['Admin'] },
-  loadComponent: () =>
-    import('./features/products/product-form/product-form-page')
-      .then(m => m.ProductFormPage),
-},
+      // ✅ Entry (User y Admin)
+      {
+        path: 'stock/entry/:productId',
+        loadComponent: () =>
+          import('./features/stock/stock-movement/stock-movement-page').then(m => m.StockMovementPage),
+      },
+
+      // ✅ Exit (User y Admin)
+      {
+        path: 'stock/exit/:productId',
+        loadComponent: () =>
+          import('./features/stock/stock-movement/stock-movement-page').then(m => m.StockMovementPage),
+      },
+
+      // ✅ Adjustment (SOLO Admin)
+      {
+        path: 'stock/adjustment/:productId',
+        canActivate: [roleGuard],
+        data: { roles: ['Admin'] },
+        loadComponent: () =>
+          import('./features/stock/stock-movement/stock-movement-page').then(m => m.StockMovementPage),
+      },
+
+      {
+      path: 'stock/history',
+      loadComponent: () =>
+        import('./features/stock/history/stock-history')
+          .then(m => m.StockHistoryPage),
+    },
+
+      { path: '', redirectTo: 'products', pathMatch: 'full' },
+    ],
+  },
+  
+
 
   { path: '**', redirectTo: 'login' },
 ];
+

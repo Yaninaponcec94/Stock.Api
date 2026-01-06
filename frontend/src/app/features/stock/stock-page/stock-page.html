@@ -1,192 +1,68 @@
-<div class="stock-header">
-  <h2>Movimiento de Stock</h2>
+<div class="page">
 
-  <div style="display:flex; gap:10px; align-items:center;">
-    <button class="btn-primary" routerLink="/products" type="button">
-      Volver a productos
-    </button>
+  <!-- ✅ HEADER FIJO -->
+  <div class="stock-header">
+    <h2>Movimiento de Stock</h2>
 
-    <!-- A) Historial general -->
-    <button class="btn-secondary" type="button" (click)="loadHistory()">
-      Ver historial
-    </button>
-  </div>
-</div>
-
-<button (click)="refresh()" [disabled]="isLoading">Refrescar</button>
-
-<div *ngIf="isLoading" style="margin-top:12px; font-weight:600;">Cargando...</div>
-<div *ngIf="!isLoading && error" style="margin-top:12px; color:red;">{{ error }}</div>
-
-<table
-  *ngIf="!isLoading && !error && items.length > 0"
-  style="margin-top:12px; width:100%; border-collapse:collapse;"
->
-  <thead style="background:#f5f5f5;">
-    <tr>
-      <th style="padding:10px; border-bottom:1px solid #e0e0e0;">Nombre Producto</th>
-      <th style="padding:10px; border-bottom:1px solid #e0e0e0;">Stock Actual</th>
-      <th style="padding:10px; border-bottom:1px solid #e0e0e0;">Mínimo Necesario</th>
-      <th style="padding:10px; border-bottom:1px solid #e0e0e0;">Alerta</th>
-      <th style="padding:10px; border-bottom:1px solid #e0e0e0;">Acciones</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr *ngFor="let s of items">
-      <td style="padding:10px; border-bottom:1px solid #eee;">
-        {{ s.productName }}
-      </td>
-
-      <td style="padding:10px; border-bottom:1px solid #eee;">
-        {{ s.quantity }}
-      </td>
-
-      <td style="padding:10px; border-bottom:1px solid #eee;">
-        {{ s.minStock }}
-      </td>
-
-      <td style="padding:10px; border-bottom:1px solid #eee;">
-        <span *ngIf="s.isBelowMinStock" style="color:#c62828; font-weight:600;">
-          Bajo mínimo
-        </span>
-        <span *ngIf="!s.isBelowMinStock" style="color:#2e7d32; font-weight:600;">
-          OK
-        </span>
-      </td>
-
-      <td style="padding:10px; border-bottom:1px solid #eee; white-space:nowrap;">
-        <a [routerLink]="['/stock/entry', s.productId]">Entrada</a>
-        |
-        <a [routerLink]="['/stock/exit', s.productId]">Salida</a>
-
-        <!-- Ajuste solo admin -->
-        <ng-container *ngIf="isAdmin">
-          | <a [routerLink]="['/stock/adjustment', s.productId]">Ajuste</a>
-        </ng-container>
-
-        <!-- B) Historial por producto -->
-        | <button type="button" (click)="loadHistory(s.productId); $event.stopPropagation()">
-            Historial
-          </button>
-
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<div *ngIf="!isLoading && !error && items.length === 0" style="margin-top:12px;">
-  No hay datos de stock.
-</div>
-
-<!-- ===================== -->
-<!-- HISTORIAL (A + B)     -->
-<!-- ===================== -->
-<div *ngIf="showHistory" id="history-section" class="history-wrap">
-
-  <!-- HEADER: título + acciones -->
-  <div class="history-header">
-    <h3 class="history-title">
-      Historial de movimientos
-      <span *ngIf="selectedProductName"> – {{ selectedProductName }}</span>
-    </h3>
-
-    <div class="history-actions">
+    <div class="stock-actions">
+      
       <button
-        *ngIf="selectedProductId"
+        class="btn btn-ghost"
         type="button"
-        class="btn-secondary"
-        (click)="loadHistory()"
-      >
-        Ver todos
+        (click)="refresh()"
+        [disabled]="isLoading">
+        Refrescar
       </button>
-
-      <button type="button" class="btn-danger" (click)="showHistory=false">
-        Cerrar
-      </button>
+     
     </div>
   </div>
 
-  <!-- FILTROS: abajo del header -->
-  <div class="history-filters">
-    <button type="button" class="btn-filter"
-      [class.active]="historyTypeFilter==='All'"
-      (click)="setHistoryFilter('All')">
-      Todos
-    </button>
+  <div *ngIf="isLoading" class="state">Cargando...</div>
+  <div *ngIf="!isLoading && error" class="state error">{{ error }}</div>
+  <div class="table-wrap" *ngIf="!isLoading && !error">
 
-    <button type="button" class="btn-filter"
-      [class.active]="historyTypeFilter==='Entry'"
-      (click)="setHistoryFilter('Entry')">
-      Entrada
-    </button>
+    <table *ngIf="items.length > 0" class="table table-stock">
+      <thead>
+        <tr>
+          <th>Nombre Producto</th>
+          <th>Stock Actual</th>
+          <th>Mínimo Necesario</th>
+          <th>Alerta</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
 
-    <button type="button" class="btn-filter"
-      [class.active]="historyTypeFilter==='Exit'"
-      (click)="setHistoryFilter('Exit')">
-      Salida
-    </button>
+      <tbody>
+        <tr *ngFor="let s of items">
+          <td>{{ s.productName }}</td>
+          <td>{{ s.quantity }}</td>
+          <td>{{ s.minStock }}</td>
 
-    <button type="button" class="btn-filter"
-      [class.active]="historyTypeFilter==='Adjustment'"
-      (click)="setHistoryFilter('Adjustment')">
-      Ajuste
-    </button>
+          <td>
+            <span class="badge" [class.off]="s.isBelowMinStock">
+              {{ s.isBelowMinStock ? 'Bajo mínimo' : 'OK' }}
+            </span>
+          </td>
+
+          <td class="actions-cell">
+            <a class="link" [routerLink]="['/stock/entry', s.productId]">Entrada</a>
+            <span class="sep">|</span>
+            <a class="link" [routerLink]="['/stock/exit', s.productId]">Salida</a>
+
+            <ng-container *ngIf="isAdmin">
+              <span class="sep">|</span>
+              <a class="link" [routerLink]="['/stock/adjustment', s.productId]">Ajuste</a>
+            </ng-container>
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="items.length === 0" class="state">
+      No hay datos de stock.
+    </div>
+
   </div>
 
-  <div *ngIf="historyLoading" style="margin-top:12px; font-weight:600;">
-    Cargando historial...
-  </div>
 
-  <table *ngIf="!historyLoading && filteredHistoryItems().length > 0"
-         class="history-table">
-    <thead>
-      <tr>
-        <th>Fecha</th>
-        <th>Producto</th>
-        <th>Tipo</th>
-        <th>Cantidad</th>
-        <th>Motivo</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let h of filteredHistoryItems()">
-        <td>{{ h.date | date:'short' }}</td>
-        <td>{{ h.productName }}</td>
-        <td>
-          <span
-            [ngClass]="{
-              'type-entry': h.type === 'Entry',
-              'type-exit': h.type === 'Exit',
-              'type-adjustment': h.type === 'Adjustment'
-            }">
-            {{ h.type }}
-          </span>
-        </td>
-        <td>{{ h.quantity }}</td>
-        <td>{{ h.reason || '-' }}</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- PAGINACIÓN -->
-  <div *ngIf="!historyLoading && historyTotalPages > 1" class="history-pagination">
-    <button type="button" (click)="prevHistoryPage()" [disabled]="historyPage === 1">
-      Anterior
-    </button>
-
-    <span>
-      Página {{ historyPage }} / {{ historyTotalPages }} (Total: {{ historyTotalItems }})
-    </span>
-
-    <button type="button" (click)="nextHistoryPage()" [disabled]="historyPage >= historyTotalPages">
-      Siguiente
-    </button>
-  </div>
-
-  <div *ngIf="!historyLoading && filteredHistoryItems().length === 0" style="margin-top:12px;">
-    No hay movimientos.
-  </div>
-</div>

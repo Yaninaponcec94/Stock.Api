@@ -1,0 +1,103 @@
+<div class="history-page">
+
+  <h2 class="history-title">Historial de movimientos</h2>
+
+  <div class="history-filters">
+    <button
+      class="filter-chip"
+      [class.active]="historyTypeFilter === 'All'"
+      (click)="setHistoryFilter('All')">
+      Todos
+    </button>
+
+    <button
+      class="filter-chip entry"
+      [class.active]="historyTypeFilter === 'Entry'"
+      (click)="setHistoryFilter('Entry')">
+      Entrada
+    </button>
+
+    <button
+      class="filter-chip exit"
+      [class.active]="historyTypeFilter === 'Exit'"
+      (click)="setHistoryFilter('Exit')">
+      Salida
+    </button>
+
+    <button
+      class="filter-chip adjustment"
+      [class.active]="historyTypeFilter === 'Adjustment'"
+      (click)="setHistoryFilter('Adjustment')">
+      Ajuste
+    </button>
+  </div>
+
+  <div class="history-table-wrapper">
+
+    <div *ngIf="historyLoading" class="state">
+      Cargando historial...
+    </div>
+
+    <table *ngIf="!historyLoading && filteredHistoryItems().length > 0"
+           class="history-table">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Producto</th>
+          <th>Tipo</th>
+          <th>Cantidad</th>
+          <th>Motivo</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let h of filteredHistoryItems()">
+          <td>{{ h.date | date:'short' }}</td>
+          <td>{{ h.productName }}</td>
+          <td>
+            <span
+              class="type-badge"
+              [ngClass]="{
+                'entry': h.type === 'Entry',
+                'exit': h.type === 'Exit',
+                'adjustment': h.type === 'Adjustment'
+              }">
+              {{ h.type }}
+            </span>
+          </td>
+          <td>{{ h.quantity }}</td>
+          <td>{{ h.reason || '-' }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!historyLoading && filteredHistoryItems().length === 0"
+         class="state">
+      No hay movimientos.
+    </div>
+
+  </div>
+
+  <div *ngIf="!historyLoading && historyTotalPages > 1"
+       class="history-pagination">
+
+    <button
+      (click)="prevHistoryPage()"
+      [disabled]="historyPage === 1">
+      ← Anterior
+    </button>
+
+    <span>
+      Página {{ historyPage }} / {{ historyTotalPages }}
+      (Total: {{ historyTotalItems }})
+    </span>
+
+    <button
+      (click)="nextHistoryPage()"
+      [disabled]="historyPage >= historyTotalPages">
+      Siguiente →
+    </button>
+
+  </div>
+
+</div>

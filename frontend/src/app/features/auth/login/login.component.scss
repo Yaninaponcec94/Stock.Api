@@ -1,57 +1,101 @@
+/* ====== CONTENEDOR GENERAL ====== */
 .login {
   min-height: 100vh;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(135deg, #0f172a, #020617);
+  color: #e5e7eb;
   padding: 24px;
-
-  h1 {
-    margin: 0 0 12px;
-    font-size: 22px;
-    font-weight: 700;
-  }
 }
 
+/* ====== BLOQUE CENTRADO ====== */
+.login-wrapper {
+  width: 100%;
+  max-width: 480px;   /* ← ancho cómodo, NO apretado */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ====== TITULO ====== */
+.login-wrapper h1 {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* ====== CARD ====== */
 .card {
-  width: 360px;
-  display: grid;
-  gap: 10px;
-  padding: 18px;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  background: #fff;
+  background: #020617;
+  border-radius: 18px;
+  padding: 36px 60px;  /* +4px a cada lado (sutil) */
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-label {
+/* ====== LABELS ====== */
+.card label {
   font-size: 13px;
-  font-weight: 600;
+  color: #cbd5e1;
 }
 
-input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+/* ====== INPUTS ====== */
+.card input {
+  width: 100%;
+  padding: 14px 16px;     /* ← inputs cómodos */
+  border-radius: 12px;
+  border: none;
+  background: #0f172a;
+  color: #e5e7eb;
+  font-size: 14px;
+}
+
+.card input::placeholder {
+  color: #64748b;
+}
+
+.card input:focus {
   outline: none;
-
-  &:focus {
-    border-color: #777;
-  }
+  box-shadow: 0 0 0 2px #3b82f6;
 }
 
-button {
-  margin-top: 6px;
-  padding: 10px;
-  border-radius: 10px;
-  border: 0;
-  cursor: pointer;
-  font-weight: 600;
-
-  &:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-  }
-}
-
+/* ====== ERRORES ====== */
 .error {
-  color: #c62828;
   font-size: 12px;
+  color: #fca5a5;
 }
+
+.card button {
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+
+  width: 100% !important;
+  display: block !important;
+
+  background: linear-gradient(90deg, #3b82f6, #2563eb);
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.card button:hover {
+  filter: brightness(1.05);
+}
+
+.card button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+

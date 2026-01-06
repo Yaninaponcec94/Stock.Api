@@ -1,32 +1,66 @@
-<h2>{{ title() }}</h2>
+<div class="movement-page">
 
-<p>Producto ID: {{ productId }}</p>
+<h2 class="movement-title">{{ title() }}</h2>
 
-<div *ngIf="error" class="alert alert-error">
+<p class="product-info">
+   Producto ID: <span>{{ productId }}</span>
+</p>
+
+<div *ngIf="error" class="alert-error">
   ⚠️ {{ error }}
 </div>
 
+<form [formGroup]="form" (ngSubmit)="submit()" class="movement-form">
 
-<form [formGroup]="form" (ngSubmit)="submit()">
-  <div style="margin: 12px 0;">
-    <label style="display:block; margin-bottom:6px;">Cantidad</label>
-    <input type="number" formControlName="quantity" style="padding:8px; width:220px;" />
-    <div *ngIf="form.controls['quantity']?.touched && form.controls['quantity']?.invalid" style="color:red; margin-top:6px;">
-      Cantidad inválida.
+    <div class="form-group">
+      <label>Cantidad</label>
+      <input
+        type="number"
+        formControlName="quantity"
+        placeholder="Ingrese la cantidad"
+      />
+
+      <div
+        *ngIf="form.controls['quantity']?.touched && form.controls['quantity']?.invalid"
+        class="form-error">
+        Cantidad inválida.
+      </div>
     </div>
+
+    <div class="form-group">
+  <label>
+    Motivo
+    <span *ngIf="mode === 'adjustment'">(obligatorio para ajuste)</span>
+  </label>
+
+  <input
+    type="text"
+    formControlName="reason"
+    placeholder="Ej: reposición, venta, ajuste"
+  />
+
+  <div
+    *ngIf="mode === 'adjustment' && form.controls['reason']?.touched && form.controls['reason']?.invalid"
+    class="form-error"
+  >
+    en ajuste el motivo es OBLIGATORIO.
   </div>
+</div>
 
-  <div style="margin: 12px 0;">
-    <label style="display:block; margin-bottom:6px;">Motivo (obligatorio- solo admin)</label>
-    <input type="text" formControlName="reason" style="padding:8px; width:420px;" />
-  </div>
 
-  <button type="submit" [disabled]="isLoading" style="padding:8px 12px;">
-    {{ isLoading ? 'Enviando...' : 'Confirmar' }}
-  </button>
+    <div class="form-actions">
+      <button type="submit" [disabled]="isLoading" class="btn-primary">
+        {{ isLoading ? 'Enviando...' : 'Confirmar' }}
+      </button>
 
-  <button type="button" [disabled]="isLoading" routerLink="/stock">
-  Cancelar
-</button>
+      <button
+        type="button"
+        [disabled]="isLoading"
+        routerLink="/stock"
+        class="btn-secondary">
+        Cancelar
+      </button>
+    </div>
 
-</form>
+  </form>
+ </div> 

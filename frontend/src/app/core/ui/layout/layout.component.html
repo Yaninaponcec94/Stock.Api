@@ -1,0 +1,74 @@
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">SM</div>
+      <div class="brand-text">
+        <div class="title">Stock</div>
+        <div class="subtitle">{{ isAdmin ? 'Administrador' : 'Usuario' }}</div>
+      </div>
+    </div>
+
+
+
+    <nav class="menu">
+
+      <!-- ✅ PADRE (no navega, solo despliega) -->
+      <button
+        type="button"
+        class="menu-item"
+        [class.active]="isProductsSectionActive"
+        [class.open]="productsOpen"
+        (click)="toggleProductsMenu()"
+      >
+        <span>Productos </span>
+        <span class="chev">▾</span>
+      </button>
+
+      <!-- ✅ HIJOS (se despliegan) -->
+      <div class="submenu" [class.open]="productsOpen">
+        <a
+          class="submenu-item"
+          routerLink="/products"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          Lista de productos
+        </a>
+
+        <a
+            *ngIf="isAdmin"
+            class="submenu-item"
+            routerLink="/products/create"
+          >
+            Nuevo producto
+          </a>
+
+      </div>
+
+      <button
+        type="button"
+        class="menu-item"
+        [class.open]="stocksOpen"
+        (click)="toggleStocksMenu()"
+      >
+        <span>Stock</span>
+        <span class="chev">▾</span>
+      </button>
+
+      <div class="submenu" [class.open]="stocksOpen">
+        <a class="submenu-item" routerLink="/stock">Movimiento de stock</a>
+        <a class="submenu-item" routerLink="/stock/history">Historial</a>
+      </div>
+      
+    </nav>
+
+    <div class="bottom">
+      <button class="logout" (click)="logout()">Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <main class="content">
+   <router-outlet></router-outlet>
+
+  </main>
+</div>

@@ -1,106 +1,134 @@
-.type-entry {
-  color: #2e7d32; 
-  font-weight: 600;
+.page {
+  color: #e5e7eb;
 }
 
-.type-exit {
-  color: #c62828; 
-  font-weight: 600;
+.stock-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;             
+  width: 100%;
+
+  background: #0b1220;       
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+
+  margin: -18px -22px 14px;   
+  padding: 18px 22px 14px;
 }
 
-.type-adjustment {
-  color: #f57c00; 
-  font-weight: 600;
+.stock-header h2 {
+  margin: 0 0 10px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
 }
 
-.history-header {
+.stock-actions {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  margin-top: 24px;
-  margin-bottom: 16px;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-.history-title {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 700;
-}
-
-.history-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.history-filters {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.btn-filter {
-  padding: 10px 18px;          // ⬅️ más grandes
-  border-radius: 999px;        // ⬅️ pill moderno
-  border: 1px solid #1976d2;
-  background: #1976d2;
-  color: white;
+.state {
+  margin: 10px 0 0;
+  color: #cbd5e1;
   font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
 }
 
-.btn-filter:hover {
-  background: #1565c0;
+.state.error {
+  color: #fecaca;
 }
 
-.btn-filter.active {
-  background: #e3f2fd;
-  color: #1976d2;
+.table-wrap {
+
+  height: calc(100vh - 165px); 
+  overflow: auto;
+  padding-bottom: 18px;
+
+  scroll-behavior: smooth;
 }
 
-.btn-danger {
-  padding: 10px 20px;          // ⬅️ más grande
-  border-radius: 999px;        // ⬅️ pill
-  border: 1px solid #c62828;
-  background: #c62828;
-  color: white;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-danger:hover {
-  background: #ffebee;
-  color: #c62828;
-}
-
-.history-wrap {
-  margin-top: 24px;
-}
-
-.history-table {
+.table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 12px;
 
-  thead {
-    background: #f5f5f5;
-  }
-
-  th, td {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    text-align: left;
-  }
+  background: rgba(2, 6, 23, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  overflow: hidden;
 }
 
-.history-pagination {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  margin-top: 16px;
+.table-stock thead th {
+  position: sticky;
+  top: 0;                     
+  z-index: 10;
+
+  text-align: left;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #cbd5e1;
+
+  padding: 12px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: #0b1220;         
 }
+
+.table tbody td {
+  padding: 12px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  color: #e5e7eb;
+}
+
+.table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.link {
+  color: #93c5fd;
+  text-decoration: none;
+  font-weight: 600;
+}
+.link:hover { text-decoration: underline; }
+
+.sep {
+  opacity: 0.35;
+  margin: 0 8px;
+}
+
+.actions-cell { white-space: nowrap; }
+
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.12);
+  color: #bbf7d0;
+  border: 1px solid rgba(34, 197, 94, 0.18);
+  font-weight: 700;
+}
+.badge.off {
+  background: rgba(239, 68, 68, 0.10);
+  color: #fecaca;
+  border-color: rgba(239, 68, 68, 0.18);
+}
+
+.btn {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
+  color: #e5e7eb;
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn:hover { background: rgba(255, 255, 255, 0.10); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.btn-danger-soft {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(239, 68, 68, 0.18);
+  background: rgba(239, 68, 68, 0.12);
+  color: #fecaca;
+  font-weight: 700;
+}
+.btn-danger-soft:hover { background: rgba(239, 68, 68, 0.18); }

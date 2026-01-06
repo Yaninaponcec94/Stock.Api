@@ -12,6 +12,7 @@ type Mode = 'entry' | 'exit' | 'adjustment';
   standalone: true,
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
   templateUrl: './stock-movement-page.html',
+  styleUrl: './stock-movement-page.scss',
 })
 export class StockMovementPage implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
@@ -39,13 +40,27 @@ export class StockMovementPage implements OnInit, OnDestroy {
 
   ngOnInit(): void {
   this.productId = Number(this.route.snapshot.paramMap.get('productId'));
-  this.mode = this.route.snapshot.paramMap.get('mode') as any;
 
-  if (!Number.isFinite(this.productId) || this.productId <= 0 || !this.mode) {
+  const path = this.route.snapshot.routeConfig?.path ?? '';
+  if (path.includes('entry')) this.mode = 'entry';
+  else if (path.includes('exit')) this.mode = 'exit';
+  else this.mode = 'adjustment';
+
+  if (!Number.isFinite(this.productId) || this.productId <= 0) {
     this.error = 'Ruta inválida';
     return;
-    }
   }
+
+  const reasonCtrl = this.form.get('reason');
+  if (this.mode === 'adjustment') {
+    reasonCtrl?.setValidators([Validators.required, Validators.minLength(3)]);
+  } else {
+    reasonCtrl?.clearValidators();
+  }
+  reasonCtrl?.updateValueAndValidity();
+}
+
+
 
   submit(): void {
     if (this.form.invalid || this.isLoading) {

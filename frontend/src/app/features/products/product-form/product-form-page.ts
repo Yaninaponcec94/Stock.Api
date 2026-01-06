@@ -35,8 +35,9 @@ export class ProductFormPage implements OnInit, OnDestroy {
   ) {
     this.form = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
-      minStock: [0, [Validators.required, Validators.min(0), Validators.max(100000)]],
+      minStock: [1, [Validators.required, Validators.min(1), Validators.max(100000)]],
     });
+
   }
 
   ngOnInit(): void {

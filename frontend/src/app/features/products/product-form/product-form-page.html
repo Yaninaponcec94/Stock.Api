@@ -30,7 +30,9 @@
       <input
         formControlName="minStock"
         type="number"
+        min="1"
       />
+
       <div
         *ngIf="form.controls['minStock']?.touched && form.controls['minStock']?.invalid"
         class="field-error"

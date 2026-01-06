@@ -73,11 +73,6 @@ export class LoginComponent {
         this.router.navigateByUrl('/products');
         this.cdr.detectChanges();
       });
-  }
-  
-  logout() {
-  this.auth.logout();
-  this.router.navigateByUrl('/login');
 }
 
 }

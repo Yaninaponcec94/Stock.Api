@@ -17,43 +17,23 @@
   </div>
 
   <div class="top-actions">
-    <button
-      *ngIf="isAdmin"
-      type="button"
-      class="primary"
-      [routerLink]="['/products/create']">
-      Nuevo producto
-    </button>
-
-    <button
-      type="button"
-      class="primary"
-      [routerLink]="['/stock']">
-      Movimiento de stock
-    </button>
-
-    <button
-      type="button"
-      class="danger"
-      (click)="logout()">
-      Cerrar sesión
-    </button>
+   
+    
 
   </div>
 </div>
 
-<ng-container *ngIf="totalPages$ | async as totalPages">
+<div class="pagination" *ngIf="totalPages$ | async as totalPages">
   <button (click)="prevPage()" [disabled]="(isLoading$ | async) || page <= 1">Anterior</button>
-<button (click)="nextPage(totalPages)">Siguiente</button>
-
+  <button (click)="nextPage(totalPages)">Siguiente</button>
   <button (click)="refresh()" [disabled]="(isLoading$ | async)">Refrescar</button>
 
   <span>
     Página {{ page }} / {{ totalPages }} (Total: {{ total$ | async }})
   </span>
-</ng-container>
+</div>
 
-<hr />
+
 
 <div *ngIf="isLoading$ | async">Cargando...</div>
 
@@ -64,7 +44,8 @@
 
 <div *ngIf="!(isLoading$ | async) && !(error$ | async)">
   <ng-container *ngIf="products$ | async as products">
-    <table *ngIf="products.length > 0" border="1" cellpadding="8" cellspacing="0">
+    <table *ngIf="products.length > 0" class="table">
+
       <thead>
         <tr>
           <th>ID</th>

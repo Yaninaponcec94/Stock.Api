@@ -1,25 +1,29 @@
 <div class="login">
-  <h1>Stock Management</h1>
+  <div class="login-wrapper">
+    <h1>Stock Management</h1>
 
-  <form class="card" [formGroup]="form" (ngSubmit)="submit()">
-    <label>Usuario</label>
-    <input type="text" formControlName="username" placeholder="usuario" />
+    <form class="card" [formGroup]="form" (ngSubmit)="submit()">
+      <label>Usuario</label>
+      <input type="text" formControlName="username" placeholder="usuario" />
 
-    <small class="error" *ngIf="form.get('username')?.touched && form.get('username')?.invalid">
-      El usuario es obligatorio
-    </small>
+      <small class="error"
+        *ngIf="form.get('username')?.touched && form.get('username')?.invalid">
+        El usuario es obligatorio
+      </small>
 
-    <label>Contraseña</label>
-    <input type="password" formControlName="password" placeholder="••••••••" />
+      <label>Contraseña</label>
+      <input type="password" formControlName="password" placeholder="••••••••" />
 
-    <small class="error" *ngIf="form.get('password')?.touched && form.get('password')?.invalid">
-      Mínimo 6 caracteres
-    </small>
+      <small class="error"
+        *ngIf="form.get('password')?.touched && form.get('password')?.invalid">
+        Mínimo 6 caracteres
+      </small>
 
-    <small class="error" *ngIf="apiError">{{ apiError }}</small>
+      <small class="error" *ngIf="apiError">{{ apiError }}</small>
 
-    <button type="submit" [disabled]="isLoading">
-      {{ isLoading ? 'Ingresando...' : 'Ingresar' }}
-    </button>
-  </form>
+      <button type="submit" [disabled]="isLoading">
+        {{ isLoading ? 'Ingresando...' : 'Ingresar' }}
+      </button>
+    </form>
+  </div>
 </div>

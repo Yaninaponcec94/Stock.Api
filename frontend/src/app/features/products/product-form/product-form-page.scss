@@ -1,55 +1,101 @@
-.card {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 16px;
+.page {
+  color: #e5e7eb;
+}
+
+.page h2 {
+  margin-bottom: 18px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
 }
 
 .form-card {
-  max-width: 420px;
+  max-width: 520px;
+  background: rgba(2, 6, 23, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+.form-error {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.18);
+  color: #fecaca;
+  font-weight: 600;
 }
 
 .form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   margin-bottom: 14px;
 }
 
 .form-field label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 600;
+  font-weight: 700;
+  color: #cbd5e1;
 }
 
 .form-field input {
-  width: 100%;
-  padding: 8px 10px;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  font-size: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(15, 23, 42, 0.75);
+  color: #e5e7eb;
+  outline: none;
+}
+
+.form-field input::placeholder {
+  color: #64748b;
 }
 
 .form-field input:focus {
-  outline: none;
-  border-color: var(--primary);
+  border-color: rgba(59, 130, 246, 0.7);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.18);
 }
-
 
 .field-error {
-  margin-top: 6px;
-  font-size: 13px;
-  color: var(--danger);
-}
-
-.form-error {
-  margin: 12px 0;
-  padding: 10px;
-  border-radius: 4px;
-  background: #fdecea;
-  color: var(--danger);
-  font-weight: 600;
+  color: #fecaca;
 }
 
 .form-actions {
   display: flex;
   gap: 10px;
-  margin-top: 10px;
+  margin-top: 18px;
+}
+
+.primary {
+  padding: 11px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  background: rgba(59, 130, 246, 0.18);
+  color: #ffffff;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.primary:hover {
+  filter: brightness(1.05);
+}
+
+.primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-actions button[type="button"] {
+  padding: 11px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
+  color: #e5e7eb;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.form-actions button[type="button"]:hover {
+  background: rgba(255, 255, 255, 0.10);
 }
